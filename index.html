@@ -204,11 +204,20 @@
     });
 
     function finalizarJuego() {
+        if (correctas === acertijos.length) {
+            logros.push("Logro desbloqueado: ¡Oficialmente eres furra!");
+        }
         document.getElementById("acertijo").innerText = "Juego terminado. Respuestas correctas: " + correctas + ", Respuestas incorrectas: " + incorrectas;
         document.getElementById("respuesta").style.display = "none";
         document.getElementById("submit").style.display = "none";
         document.getElementById("pista").style.display = "none";
         document.getElementById("temporizador").style.display = "none";
+        mostrarLogros();
+    }
+
+    function mostrarLogros() {
+        const marcoLogros = document.getElementById("marco-logros");
+        marcoLogros.innerHTML = "<h3>Logros</h3><ul>" + logros.map(logro => `<li>${logro}</li>`).join('') + "</ul>";
     }
 
     // Iniciar el juego
