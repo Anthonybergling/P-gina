@@ -127,7 +127,10 @@
    Tiempo: <span id="tiempo">30</span> segundos
   </div> 
   <div id="acertijo" class="acertijo"></div> 
-  <input type="text" id="respuesta" class="input" placeholder="Escribe tu respuesta aquí"> <button id="submit" class="button">Enviar</button> <button id="pista" class="button">Pedir Pista</button>
+  <input type="text" id="respuesta" class="input" placeholder="Escribe tu respuesta aquí"> 
+  <button id="submit" class="button">Enviar</button> 
+  <button id="pista" class="button">Pedir Pista</button>
+  <button id="noPresionar" class="button">No Presionar</button>
   <div id="mensaje" class="mensaje"></div> 
   <div id="marco-logros" class="marco-logros"></div> 
  </div> 
@@ -201,6 +204,10 @@
         } else {
             document.getElementById("mensaje").innerText = "Ya has usado tu pista para este acertijo.";
         }
+    });
+
+    document.getElementById("noPresionar").addEventListener("click", function() {
+        document.getElementById("mensaje").innerText = "La curiosidad mató al gato y a la furra también.";
     });
 
     function finalizarJuego() {
