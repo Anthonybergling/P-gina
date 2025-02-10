@@ -1,236 +1,227 @@
-<!doctype html>
-<html lang="es"> 
- <head> 
-  <meta charset="UTF-8"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <link rel="stylesheet" href="styles.css"> 
-  <title>Acertijos Divertidos</title>  
- <style type="text/css" id="dcoder_stylesheet">body {
-        font-family: 'Arial', sans-serif;
-        background: linear-gradient(135deg, #f0f4c3, #c5e1a5);
-        text-align: center;
-        padding: 20px;
-        animation: fadeIn 1s;
-    }
-
-    .container {
-        background: #ffffff;
-        border: 2px solid #388e3c;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        margin: auto;
-        transition: transform 0.3s;
-    }
-
-    .container:hover {
-        transform: scale(1.02);
-    }
-
-    h1 {
-        color: #388e3c;
-        font-size: 2.5em;
-        margin-bottom: 20px;
-    }
-
-    .acertijo {
-        font-size: 1.5em;
-        margin: 20px 0;
-        color: #2e7d32;
-    }
-
-    .input {
-        padding: 10px;
-        margin: 10px 0;
-        width: 80%;
-        border: 2px solid #388e3c;
-        border-radius: 5px;
-        transition: border-color 0.3s;
-    }
-
-    .input:focus {
-        border-color: #66bb6a;
-        outline: none;
-    }
-
-    .button {
-        padding: 10px 15px;
-        background-color: #388e3c;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.3s;
-        margin: 5px;
-    }
-
-    .button:hover {
-        background-color: #66bb6a;
-        transform: scale(1.05);
-    }
-
-    #noPresionar {
-        background-color: #d32f2f;
-    }
-
-    #noPresionar:hover {
-        background-color: #e57373;
-        transform: scale(1.05);
-    }
-
-    .mensaje {
-        margin: 20px 0;
-        font-size: 1.2em;
-        color: #d32f2f;
-    }
-
-    .temporizador {
-        font-size: 1.2em;
-        color: #1976d2;
-        margin-bottom: 10px;
-    }
-
-    .marco-logros {
-        background: #e8f5e9;
-        border-radius: 10px;
-        padding: 15px;
-        margin-top: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .marco-logros h3 {
-        color: #388e3c;
-    }
-
-    .marco-logros ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .marco-logros li {
-        background: #c8e6c9;
-        margin: 5px 0;
-        padding: 10px;
-        border-radius: 5px;
-        transition: background 0.3s;
-    }
-
-    .marco-logros li:hover {
-        background: #a5d6a7;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivinatrix - Juego de Acertijos</title>
+    <style>
+        :root {
+            --color-correcto: #4CAF50;
+            --color-error: #f44336;
+            --color-timer: #2196F3;
         }
-        to {
-            opacity: 1;
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1a1a1a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
-    }</style></head> 
- <body> 
-  <div class="container"> 
-   <h1>¡Adivina el Acertijo!</h1> 
-   <div id="temporizador" class="temporizador">
-     Tiempo: <span id="tiempo">30</span> segundos 
-   </div> 
-   <div id="acertijo" class="acertijo"></div> 
-   <input type="text" id="respuesta" class="input" placeholder="Escribe tu respuesta aquí"> <button id="submit" class="button">Enviar</button> <button id="pista" class="button">Pedir Pista</button> <button id="noPresionar" class="button">No Presionar</button> 
-   <div id="mensaje" class="mensaje"></div> 
-   <div id="marco-logros" class="marco-logros"></div> 
-  </div> 
-  <script src="script.js"></script>  
- 
-<script type="text/javascript" id="dcoder_script">const acertijos = [
-        { pregunta: "¿Qué tiene cabeza, pero no tiene cerebro?", respuesta: "ajo" },
-        { pregunta: "¿Qué se rompe al decir su nombre?", respuesta: "silencio" },
-        { pregunta: "¿Qué es lo que siempre sube y nunca baja?", respuesta: "edad" },
-        { pregunta: "¿Qué tiene un ojo pero no puede ver?", respuesta: "aguja" },
-        { pregunta: "¿Qué es lo que se puede romper, pero nunca se puede tocar?", respuesta: "promesa" },
-        { pregunta: "¿Qué va para arriba y para abajo, pero siempre se queda en el mismo lugar?", respuesta: "escalera" },
-        { pregunta: "¿Qué es lo que tiene un corazón que no late?", respuesta: "alcachofa" },
-        { pregunta: "¿Qué es lo que se puede llenar de agua, pero nunca se moja?", respuesta: "red" },
-        { pregunta: "¿Qué es lo que tiene dientes, pero no muerde?", respuesta: "peine" },
-        { pregunta: "¿Qué es lo que siempre está en el medio de la tierra?", respuesta: "letra 'r'" }
-    ];
 
-    let index = 0;
-    let correctas = 0;
-    let incorrectas = 0;
-    let logros = [];
-    let tiempoRestante = 30;
-    let temporizador;
-    let pistasUsadas = 0;
-
-    function mostrarAcertijo() {
-        if (index < acertijos.length) {
-            document.getElementById("acertijo").innerText = acertijos[index].pregunta;
-            tiempoRestante = 30; // Reiniciar el temporizador
-            document.getElementById("tiempo").innerText = tiempoRestante;
-            clearInterval(temporizador); // Limpiar cualquier temporizador anterior
-            temporizador = setInterval(actualizarTemporizador, 1000); // Iniciar el temporizador
-        } else {
-            finalizarJuego();
+        .contenedor-juego {
+            background: #2d2d2d;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 90%;
         }
-    }
 
-    function actualizarTemporizador() {
-        tiempoRestante--;
-        document.getElementById("tiempo").innerText = tiempoRestante;
-        if (tiempoRestante <= 0) {
-            clearInterval(temporizador);
-            document.getElementById("mensaje").innerText = "¡Se acabó el tiempo! Respuesta incorrecta.";
-            incorrectas++;
-            logros.push("Logro desbloqueado: ¡No te rindas!");
-            index++;
-            mostrarAcertijo();
+        #acertijo {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            min-height: 100px;
+            padding: 20px;
+            background: #333;
+            border-radius: 10px;
+            text-align: center;
         }
-    }
 
-    document.getElementById("submit").addEventListener("click", function() {
-        const respuesta = document.getElementById("respuesta").value.toLowerCase();
-        clearInterval(temporizador); // Detener el temporizador al enviar respuesta
-        if (respuesta === acertijos[index].respuesta) {
-            document.getElementById("mensaje").innerText = "¡Correcto! ¡Sigue así!";
-            correctas++;
-        } else {
-            document.getElementById("mensaje").innerText = "Incorrecto. La respuesta era: " + acertijos[index].respuesta;
-            incorrectas++;
+        #tiempo-restante {
+            height: 10px;
+            background: #444;
+            border-radius: 5px;
+            margin: 1rem 0;
         }
-        index++;
-        mostrarAcertijo();
-    });
 
-    document.getElementById("pista").addEventListener("click", function() {
-        if (pistasUsadas < 1) {
-            const pista = `La respuesta comienza con: ${acertijos[index].respuesta.charAt(0)}`;
-            document.getElementById("mensaje").innerText = pista;
-            pistasUsadas++;
-        } else {
-            document.getElementById("mensaje").innerText = "Ya has usado tu pista para este acertijo.";
+        #barra-tiempo {
+            height: 100%;
+            width: 100%;
+            background: var(--color-timer);
+            border-radius: 5px;
+            transition: width 1s linear;
         }
-    });
 
-    document.getElementById("noPresionar").addEventListener("click", function() {
-        document.getElementById("mensaje").innerText = "La curiosidad mató al gato y a la furra también.";
-    });
-
-    function finalizarJuego() {
-        if (correctas === acertijos.length) {
-            logros.push("Logro desbloqueado: ¡Oficialmente eres furra!");
+        #entrada-respuesta {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
         }
-        document.getElementById("acertijo").innerText = "Juego terminado. Respuestas correctas: " + correctas + ", Respuestas incorrectas: " + incorrectas;
-        document.getElementById("respuesta").style.display = "none";
-        document.getElementById("submit").style.display = "none";
-        document.getElementById("pista").style.display = "none";
-        document.getElementById("temporizador").style.display = "none";
-        mostrarLogros();
-    }
 
-    function mostrarLogros() {
-        const marcoLogros = document.getElementById("marco-logros");
-        marcoLogros.innerHTML = "<h3>Logros</h3><ul>" + logros.map(logro => `<li>${logro}</li>`).join('') + "</ul>";
-    }
+        .puntuacion {
+            font-size: 1.4rem;
+            margin: 1rem 0;
+            color: var(--color-timer);
+        }
 
-    // Iniciar el juego
-    mostrarAcertijo();</script></body></html>
+        .boton {
+            padding: 10px 25px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .boton:hover {
+            transform: scale(1.05);
+        }
+
+        .animacion-acierto {
+            animation: acierto 0.5s;
+        }
+
+        .animacion-error {
+            animation: error 0.5s;
+        }
+
+        @keyframes acierto {
+            0% { background-color: var(--color-correcto); }
+            100% { background-color: #2d2d2d; }
+        }
+
+        @keyframes error {
+            0% { background-color: var(--color-error); }
+            100% { background-color: #2d2d2d; }
+        }
+
+        #pistas {
+            margin: 1rem 0;
+            font-style: italic;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor-juego">
+        <h1>🕵️ Adivinatrix 🕵️</h1>
+        <div class="puntuacion">Puntos: <span id="puntos">0</span></div>
+        <div id="tiempo-restante">
+            <div id="barra-tiempo"></div>
+        </div>
+        <div id="acertijo"></div>
+        <div id="pistas"></div>
+        <input type="text" id="entrada-respuesta" placeholder="Escribe tu respuesta aquí...">
+        <button class="boton" onclick="verificarRespuesta()">Comprobar</button>
+        <button class="boton" onclick="usarPista()">Pista (-10 pts)</button>
+    </div>
+
+    <script>
+        const acertijos = [
+            {
+                pregunta: "Blanco por dentro, verde por fuera. Si quieres que te lo diga, espera.",
+                respuesta: "pera",
+                pistas: ["Es una fruta", "Comienza con P"]
+            },
+            {
+                pregunta: "Oro parece, plata no es. El que no lo adivine, bien tonto es.",
+                respuesta: "plátano",
+                pistas: ["Es una fruta tropical", "Tiene forma curva"]
+            }
+        ];
+
+        let puntos = 0;
+        let tiempoRestante = 30;
+        let intervalo;
+        let acertijoActual = 0;
+        let pistasUsadas = 0;
+
+        function iniciarJuego() {
+            document.getElementById('acertijo').textContent = acertijos[acertijoActual].pregunta;
+            document.getElementById('pistas').textContent = '';
+            iniciarTemporizador();
+        }
+
+        function iniciarTemporizador() {
+            tiempoRestante = 30;
+            intervalo = setInterval(() => {
+                tiempoRestante--;
+                document.getElementById('barra-tiempo').style.width = `${(tiempoRestante/30)*100}%`;
+                
+                if(tiempoRestante <= 0) {
+                    clearInterval(intervalo);
+                    penalizarTiempo();
+                    siguienteAcertijo();
+                }
+            }, 1000);
+        }
+
+        function verificarRespuesta() {
+            const respuestaUsuario = document.getElementById('entrada-respuesta').value.toLowerCase().trim();
+            const respuestaCorrecta = acertijos[acertijoActual].respuesta.toLowerCase();
+            
+            if(respuestaUsuario === respuestaCorrecta) {
+                puntos += tiempoRestante * (acertijoActual + 1);
+                document.querySelector('.contenedor-juego').classList.add('animacion-acierto');
+                siguienteAcertijo();
+            } else {
+                puntos = Math.max(0, puntos - 5);
+                document.querySelector('.contenedor-juego').classList.add('animacion-error');
+            }
+            
+            document.getElementById('puntos').textContent = puntos;
+            document.getElementById('entrada-respuesta').value = '';
+            
+            setTimeout(() => {
+                document.querySelector('.contenedor-juego').classList.remove('animacion-acierto', 'animacion-error');
+            }, 500);
+        }
+
+        function usarPista() {
+            if(puntos >= 10 && pistasUsadas < acertijos[acertijoActual].pistas.length) {
+                puntos -= 10;
+                document.getElementById('pistas').textContent += acertijos[acertijoActual].pistas[pistasUsadas] + ' | ';
+                pistasUsadas++;
+                document.getElementById('puntos').textContent = puntos;
+            }
+        }
+
+        function penalizarTiempo() {
+            puntos = Math.max(0, puntos - 15);
+            document.getElementById('puntos').textContent = puntos;
+        }
+
+        function siguienteAcertijo() {
+            clearInterval(intervalo);
+            acertijoActual++;
+            pistasUsadas = 0;
+            
+            if(acertijoActual < acertijos.length) {
+                iniciarJuego();
+            } else {
+                alert(`¡Juego completado! Puntuación final: ${puntos}`);
+                reiniciarJuego();
+            }
+        }
+
+        function reiniciarJuego() {
+            acertijoActual = 0;
+            puntos = 0;
+            iniciarJuego();
+        }
+
+        // Iniciar el juego al cargar
+        window.onload = iniciarJuego;
+    </script>
+</body>
+</html>
