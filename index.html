@@ -4,9 +4,8 @@
   <meta charset="UTF-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <link rel="stylesheet" href="styles.css"> 
-  <title>Acertijos Divertidos</title> 
- <style type="text/css" id="dcoder_stylesheet">
-    body {
+  <title>Acertijos Divertidos</title>  
+ <style type="text/css" id="dcoder_stylesheet">body {
         font-family: 'Arial', sans-serif;
         background: linear-gradient(135deg, #f0f4c3, #c5e1a5);
         text-align: center;
@@ -128,26 +127,21 @@
         to {
             opacity: 1;
         }
-    }
-</style>
-</head> 
-<body> 
- <div class="container"> 
-  <h1>¡Adivina el Acertijo!</h1> 
-  <div id="temporizador" class="temporizador">
-   Tiempo: <span id="tiempo">30</span> segundos
+    }</style></head> 
+ <body> 
+  <div class="container"> 
+   <h1>¡Adivina el Acertijo!</h1> 
+   <div id="temporizador" class="temporizador">
+     Tiempo: <span id="tiempo">30</span> segundos 
+   </div> 
+   <div id="acertijo" class="acertijo"></div> 
+   <input type="text" id="respuesta" class="input" placeholder="Escribe tu respuesta aquí"> <button id="submit" class="button">Enviar</button> <button id="pista" class="button">Pedir Pista</button> <button id="noPresionar" class="button">No Presionar</button> 
+   <div id="mensaje" class="mensaje"></div> 
+   <div id="marco-logros" class="marco-logros"></div> 
   </div> 
-  <div id="acertijo" class="acertijo"></div> 
-  <input type="text" id="respuesta" class="input" placeholder="Escribe tu respuesta aquí"> 
-  <button id="submit" class="button">Enviar</button> 
-  <button id="pista" class="button">Pedir Pista</button>
-  <button id="noPresionar" class="button">No Presionar</button>
-  <div id="mensaje" class="mensaje"></div> 
-  <div id="marco-logros" class="marco-logros"></div> 
- </div> 
- <script src="script.js"></script> 
- <script type="text/javascript" id="dcoder_script">
-    const acertijos = [
+  <script src="script.js"></script>  
+ 
+<script type="text/javascript" id="dcoder_script">const acertijos = [
         { pregunta: "¿Qué tiene cabeza, pero no tiene cerebro?", respuesta: "ajo" },
         { pregunta: "¿Qué se rompe al decir su nombre?", respuesta: "silencio" },
         { pregunta: "¿Qué es lo que siempre sube y nunca baja?", respuesta: "edad" },
@@ -239,7 +233,4 @@
     }
 
     // Iniciar el juego
-    mostrarAcertijo();
-</script>
-</body>
-</html>
+    mostrarAcertijo();</script></body></html>
