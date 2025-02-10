@@ -110,6 +110,42 @@
             font-style: italic;
             color: #888;
         }
+
+        .contenedor-logros {
+            background: #2d2d2d;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 90%;
+            margin-top: 20px;
+        }
+
+        .contenedor-logros h2 {
+            margin: 0;
+            padding: 0;
+            font-size: 1.5rem;
+        }
+
+        .contenedor-logros ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .contenedor-logros li {
+            background: #444;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contenedor-logros li span {
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -126,6 +162,11 @@
         <button class="boton" onclick="usarPista()">Pista (-10 pts)</button>
     </div>
 
+    <div class="contenedor-logros">
+        <h2>Logros</h2>
+        <ul id="lista-logros"></ul>
+    </div>
+
     <script>
         const acertijos = [
             {
@@ -138,6 +179,12 @@
                 respuesta: "plátano",
                 pistas: ["Es una fruta tropical", "Tiene forma curva"]
             }
+        ];
+
+        const logros = [
+            { nombre: "Primer Acierto", descripcion: "Acierta tu primer acertijo", desbloqueado: false },
+            { nombre: "Cinco Aciertos", descripcion: "Acierta cinco acertijos", desbloqueado: false },
+            { nombre: "Maestro del Tiempo", descripcion: "Completa un acertijo con más de 20 segundos restantes", desbloqueado: false }
         ];
 
         let puntos = 0;
@@ -185,6 +232,8 @@
             setTimeout(() => {
                 document.querySelector('.contenedor-juego').classList.remove('animacion-acierto', 'animacion-error');
             }, 500);
+
+            verificarLogros();
         }
 
         function usarPista() {
@@ -220,8 +269,45 @@
             iniciarJuego();
         }
 
-        // Iniciar el juego al cargar
-        window.onload = iniciarJuego;
+        function verificarLogros() {
+            if (!logros[0].desbloqueado && puntos > 0) {
+                desbloquearLogro(0);
+            }
+            if (!logros[1].desbloqueado && puntos >= 5) {
+                desbloquearLogro(1);
+            }
+            if (!logros[2].desbloqueado && tiempoRestante > 20) {
+                desbloquearLogro(2);
+            }
+        }
+
+        function desbloquearLogro(indice) {
+            logros[indice].desbloqueado = true;
+            mostrarLogro(logros[indice]);
+        }
+
+        function mostrarLogro(logro) {
+            const listaLogros = document.getElementById('lista-logros');
+            const logroItem = document.createElement('li');
+            logroItem.innerHTML = `<span>${logro.nombre}</span><span>${logro.descripcion}</span>`;
+            listaLogros.appendChild(logroItem);
+        }
+
+        window.onload = () => {
+            iniciarJuego();
+            mostrarLogrosIniciales();
+        };
+
+        function mostrarLogrosIniciales() {
+            const listaLogros = document.getElementById('lista-logros');
+            logros.forEach(logro => {
+                if (logro.desbloqueado) {
+                    const logroItem = document.createElement('li');
+                    logroItem.innerHTML = `<span>${logro.nombre}</span><span>${logro.descripcion}</span>`;
+                    listaLogros.appendChild(logroItem);
+                }
+            });
+        }
     </script>
 </body>
 </html>
