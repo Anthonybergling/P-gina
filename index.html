@@ -3,33 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adivinatrix - Juego de Acertijos</title>
+    <title>Adivinatrix Pro</title>
     <style>
         :root {
             --color-correcto: #4CAF50;
             --color-error: #f44336;
             --color-timer: #2196F3;
+            --color-fondo: #1a1a1a;
+            --color-texto: white;
+            --color-contenedor: rgba(45, 45, 45, 0.9);
+            --color-input: #333;
+        }
+
+        body.tema-claro {
+            --color-fondo: #f0f0f0;
+            --color-texto: #333;
+            --color-contenedor: rgba(255, 255, 255, 0.9);
+            --color-input: #e0e0e0;
         }
 
         body {
             font-family: 'Arial', sans-serif;
-            background: #1a1a1a;
-            color: white;
+            color: var(--color-texto);
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            background: linear-gradient(270deg, var(--color-fondo), #2d2d2d, #4CAF50);
+            background-size: 400% 400%;
+            animation: fondoAnimado 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+            transition: all 0.3s;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .pantalla-bienvenida {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: aparecerBienvenida 1s ease-out;
+        }
+
+        .pantalla-bienvenida.hidden {
+            animation: desaparecerBienvenida 0.8s ease-in forwards;
+        }
+
+        .titulo-bienvenida {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: flotar 3s ease-in-out infinite;
+        }
+
+        .boton-comenzar {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .boton-comenzar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(76,175,80,0.5);
         }
 
         .contenedor-juego {
-            background: #2d2d2d;
+            background: var(--color-contenedor);
             padding: 2rem;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
             max-width: 600px;
             width: 90%;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: aparecer 1s ease-out;
+            display: none;
+        }
+
+        @keyframes fondoAnimado {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes aparecer {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes aparecerBienvenida {
+            0% { opacity: 0; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes desaparecerBienvenida {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.8); display: none; }
+        }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 0 0 1.5rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         #acertijo {
@@ -37,23 +149,31 @@
             margin: 1rem 0;
             min-height: 100px;
             padding: 20px;
-            background: #333;
+            background: var(--color-input);
             border-radius: 10px;
             text-align: center;
+            border: 2px solid rgba(255,255,255,0.1);
+            animation: textoFlotante 3s ease-in-out infinite;
+        }
+
+        @keyframes textoFlotante {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         #tiempo-restante {
             height: 10px;
             background: #444;
             border-radius: 5px;
-            margin: 1rem 0;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
         }
 
         #barra-tiempo {
             height: 100%;
             width: 100%;
-            background: var(--color-timer);
-            border-radius: 5px;
+            background: linear-gradient(90deg, var(--color-timer), #21b0f3);
             transition: width 1s linear;
         }
 
@@ -65,189 +185,261 @@
             border: none;
             border-radius: 8px;
             text-align: center;
+            background: var(--color-input);
+            color: var(--color-texto);
+            transition: transform 0.3s;
         }
 
-        .puntuacion {
+        #entrada-respuesta:focus {
+            outline: none;
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(33,150,243,0.3);
+        }
+
+        .estadisticas {
+            display: flex;
+            justify-content: space-between;
+            margin: 1.5rem 0;
             font-size: 1.4rem;
-            margin: 1rem 0;
-            color: var(--color-timer);
+        }
+
+        .vidas {
+            color: var(--color-error);
         }
 
         .boton {
-            padding: 10px 25px;
-            margin: 5px;
+            padding: 12px 30px;
+            margin: 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.2s;
+            transition: all 0.3s;
+            background: linear-gradient(45deg, var(--color-timer), #21b0f3);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .boton:hover {
-            transform: scale(1.05);
-        }
-
-        .animacion-acierto {
-            animation: acierto 0.5s;
-        }
-
-        .animacion-error {
-            animation: error 0.5s;
-        }
-
-        @keyframes acierto {
-            0% { background-color: var(--color-correcto); }
-            100% { background-color: #2d2d2d; }
-        }
-
-        @keyframes error {
-            0% { background-color: var(--color-error); }
-            100% { background-color: #2d2d2d; }
-        }
-
-        #pistas {
-            margin: 1rem 0;
-            font-style: italic;
-            color: #888;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
         .contenedor-logros {
-            background: #2d2d2d;
+            background: var(--color-contenedor);
             padding: 1rem;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
             max-width: 600px;
             width: 90%;
             margin-top: 20px;
+            backdrop-filter: blur(10px);
+            z-index: 1;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .contenedor-logros h2 {
-            margin: 0;
-            padding: 0;
-            font-size: 1.5rem;
-        }
-
-        .contenedor-logros ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .contenedor-logros li {
-            background: #444;
+        .logro-item {
+            background: linear-gradient(45deg, rgba(76,175,80,0.2), rgba(33,150,243,0.2));
             margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 15px;
+            border-radius: 10px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 15px;
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: aparecerLogro 0.5s forwards;
         }
 
-        .contenedor-logros li span {
-            font-size: 1rem;
+        @keyframes aparecerLogro {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .boton-tema {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--color-timer), #21b0f3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 2;
+            border: none;
+            color: white;
+        }
+
+        .notificacion-logro {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(76,175,80,0.9);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: aparecerNotificacion 0.5s ease-out;
+            z-index: 3;
+        }
+
+        @keyframes aparecerNotificacion {
+            0% { top: -100px; }
+            100% { top: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="contenedor-juego">
-        <h1>🕵️ Adivinatrix 🕵️</h1>
-        <div class="puntuacion">Puntos: <span id="puntos">0</span></div>
+    <div class="pantalla-bienvenida" id="bienvenida">
+        <h1 class="titulo-bienvenida">🔮 ADIVINATRIX PRO 🔮</h1>
+        <button class="boton-comenzar" onclick="comenzarJuego()">¡JUGAR!</button>
+    </div>
+
+    <div id="particles-js"></div>
+    
+    <div class="contenedor-juego" id="juego">
+        <button class="boton-tema" onclick="cambiarTema()">🌓</button>
+        <h1>🔮 ADIVINATRIX PRO 🔮</h1>
+        
+        <div class="estadisticas">
+            <div class="puntuacion">⭐ <span id="puntos">0</span></div>
+            <div class="vidas">❤️ <span id="vidas">3</span></div>
+        </div>
+
         <div id="tiempo-restante">
             <div id="barra-tiempo"></div>
         </div>
+
         <div id="acertijo"></div>
         <div id="pistas"></div>
-        <input type="text" id="entrada-respuesta" placeholder="Escribe tu respuesta aquí...">
-        <button class="boton" onclick="verificarRespuesta()">Comprobar</button>
-        <button class="boton" onclick="usarPista()">Pista (-10 pts)</button>
+
+        <input type="text" id="entrada-respuesta" placeholder="Escribe tu respuesta...">
+        
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <button class="boton" onclick="verificarRespuesta()">COMPROBAR</button>
+            <button class="boton" onclick="usarPista()">PISTA (-10⭐)</button>
+        </div>
     </div>
 
     <div class="contenedor-logros">
-        <h2>Logros</h2>
-        <ul id="lista-logros"></ul>
+        <h2>🏆 LOGROS DESBLOQUEADOS 🏆</h2>
+        <div id="lista-logros"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        const acertijos = [
-            {
-                pregunta: "Blanco por dentro, verde por fuera. Si quieres que te lo diga, espera.",
-                respuesta: "pera",
-                pistas: ["Es una fruta", "Comienza con P"]
+        function comenzarJuego() {
+            const bienvenida = document.getElementById('bienvenida');
+            const juego = document.getElementById('juego');
+            bienvenida.classList.add('hidden');
+            setTimeout(() => {
+                juego.style.display = 'block';
+                iniciarJuego();
+            }, 800);
+        }
+
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80 },
+                color: { value: '#4CAF50' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5 },
+                size: { value: 3 },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
             },
-            {
-                pregunta: "Oro parece, plata no es. El que no lo adivine, bien tonto es.",
-                respuesta: "plátano",
-                pistas: ["Es una fruta tropical", "Tiene forma curva"]
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
             }
+        });
+
+        const acertijos = [
+            { pregunta: "Blanco por dentro, verde por fuera. Si quieres que te lo diga, espera.", respuesta: "pera", pistas: ["Es una fruta", "Comienza con P"] },
+            { pregunta: "Oro parece, plata no es. El que no lo adivine, bien tonto es.", respuesta: "plátano", pistas: ["Es una fruta tropical", "Tiene forma curva"] },
+            { pregunta: "Tengo hojas pero no soy árbol, tengo páginas pero no soy libro.", respuesta: "libreta", pistas: ["Se usa para escribir", "De papel"] },
+            { pregunta: "Soy ligero como una pluma pero nadie puede sostenerme por mucho tiempo.", respuesta: "sueño", pistas: ["Relacionado con dormir", "Intangible"] },
+            { pregunta: "Cuanto más quitas, más grande se hace. ¿Qué es?", respuesta: "agujero", pistas: ["Espacio vacío", "Se hace con una pala"] }
         ];
 
         const logros = [
             { nombre: "Primer Acierto", descripcion: "Acierta tu primer acertijo", desbloqueado: false },
-            { nombre: "Cinco Aciertos", descripcion: "Acierta cinco acertijos", desbloqueado: false },
-            { nombre: "Maestro del Tiempo", descripcion: "Completa un acertijo con más de 20 segundos restantes", desbloqueado: false }
+            { nombre: "Racha de 3", descripcion: "Acierta 3 veces seguidas", desbloqueado: false },
+            { nombre: "Maestro del Tiempo", descripcion: "Resuelve con >20 segundos", desbloqueado: false },
+            { nombre: "Sin Pistas", descripcion: "Completa un nivel sin pistas", desbloqueado: false }
         ];
 
         let puntos = 0;
+        let vidas = 3;
         let tiempoRestante = 30;
         let intervalo;
         let acertijoActual = 0;
         let pistasUsadas = 0;
+        let racha = 0;
 
         function iniciarJuego() {
             document.getElementById('acertijo').textContent = acertijos[acertijoActual].pregunta;
             document.getElementById('pistas').textContent = '';
+            document.getElementById('vidas').textContent = '❤️'.repeat(vidas);
+            tiempoRestante = puntos > 50 ? 20 : 30;
             iniciarTemporizador();
         }
 
         function iniciarTemporizador() {
-            tiempoRestante = 30;
+            clearInterval(intervalo);
+            document.getElementById('barra-tiempo').style.width = '100%';
             intervalo = setInterval(() => {
                 tiempoRestante--;
-                document.getElementById('barra-tiempo').style.width = `${(tiempoRestante/30)*100}%`;
-                
-                if(tiempoRestante <= 0) {
-                    clearInterval(intervalo);
-                    penalizarTiempo();
-                    siguienteAcertijo();
-                }
+                document.getElementById('barra-tiempo').style.width = `${(tiempoRestante / 30) * 100}%`;
+                if (tiempoRestante <= 0) penalizarTiempo();
             }, 1000);
         }
 
         function verificarRespuesta() {
-            const respuestaUsuario = document.getElementById('entrada-respuesta').value.toLowerCase().trim();
-            const respuestaCorrecta = acertijos[acertijoActual].respuesta.toLowerCase();
-            
-            if(respuestaUsuario === respuestaCorrecta) {
+            const respuesta = document.getElementById('entrada-respuesta').value.toLowerCase().trim();
+            if (respuesta === acertijos[acertijoActual].respuesta) {
                 puntos += tiempoRestante * (acertijoActual + 1);
-                document.querySelector('.contenedor-juego').classList.add('animacion-acierto');
+                racha++;
+                if (pistasUsadas === 0) desbloquearLogro(3);
                 siguienteAcertijo();
+                confetti({ particleCount: 100, spread: 70 });
             } else {
-                puntos = Math.max(0, puntos - 5);
-                document.querySelector('.contenedor-juego').classList.add('animacion-error');
+                vidas--;
+                racha = 0;
+                actualizarUI();
+                if (vidas <= 0) finJuego();
             }
-            
-            document.getElementById('puntos').textContent = puntos;
-            document.getElementById('entrada-respuesta').value = '';
-            
-            setTimeout(() => {
-                document.querySelector('.contenedor-juego').classList.remove('animacion-acierto', 'animacion-error');
-            }, 500);
-
             verificarLogros();
+            actualizarUI();
         }
 
         function usarPista() {
-            if(puntos >= 10 && pistasUsadas < acertijos[acertijoActual].pistas.length) {
+            if (puntos >= 10 && pistasUsadas < 2) {
                 puntos -= 10;
-                document.getElementById('pistas').textContent += acertijos[acertijoActual].pistas[pistasUsadas] + ' | ';
                 pistasUsadas++;
-                document.getElementById('puntos').textContent = puntos;
+                document.getElementById('pistas').textContent += acertijos[acertijoActual].pistas[pistasUsadas - 1] + ' ';
+                actualizarUI();
             }
-        }
-
-        function penalizarTiempo() {
-            puntos = Math.max(0, puntos - 15);
-            document.getElementById('puntos').textContent = puntos;
         }
 
         function siguienteAcertijo() {
@@ -255,59 +447,75 @@
             acertijoActual++;
             pistasUsadas = 0;
             
-            if(acertijoActual < acertijos.length) {
+            if (acertijoActual < acertijos.length) {
                 iniciarJuego();
             } else {
-                alert(`¡Juego completado! Puntuación final: ${puntos}`);
-                reiniciarJuego();
+                finJuego();
             }
         }
 
+        function penalizarTiempo() {
+            vidas--;
+            actualizarUI();
+            if (vidas <= 0) {
+                finJuego();
+            } else {
+                siguienteAcertijo();
+            }
+        }
+
+        function finJuego() {
+            clearInterval(intervalo);
+            alert(`¡Juego terminado! Puntuación: ${puntos}`);
+            reiniciarJuego();
+        }
+
         function reiniciarJuego() {
-            acertijoActual = 0;
             puntos = 0;
+            vidas = 3;
+            acertijoActual = 0;
+            actualizarUI();
             iniciarJuego();
         }
 
         function verificarLogros() {
-            if (!logros[0].desbloqueado && puntos > 0) {
-                desbloquearLogro(0);
-            }
-            if (!logros[1].desbloqueado && puntos >= 5) {
-                desbloquearLogro(1);
-            }
-            if (!logros[2].desbloqueado && tiempoRestante > 20) {
-                desbloquearLogro(2);
-            }
+            if (puntos > 0 && !logros[0].desbloqueado) desbloquearLogro(0);
+            if (racha >= 3 && !logros[1].desbloqueado) desbloquearLogro(1);
+            if (tiempoRestante > 20 && !logros[2].desbloqueado) desbloquearLogro(2);
         }
 
         function desbloquearLogro(indice) {
             logros[indice].desbloqueado = true;
-            mostrarLogro(logros[indice]);
+            const notificacion = document.createElement('div');
+            notificacion.className = 'notificacion-logro';
+            notificacion.textContent = `🏆 ${logros[indice].nombre} DESBLOQUEADO!`;
+            document.body.appendChild(notificacion);
+            setTimeout(() => notificacion.remove(), 3000);
+            actualizarLogros();
         }
 
-        function mostrarLogro(logro) {
-            const listaLogros = document.getElementById('lista-logros');
-            const logroItem = document.createElement('li');
-            logroItem.innerHTML = `<span>${logro.nombre}</span><span>${logro.descripcion}</span>`;
-            listaLogros.appendChild(logroItem);
+        function actualizarLogros() {
+            const lista = document.getElementById('lista-logros');
+            lista.innerHTML = logros.filter(l => l.desbloqueado)
+                                   .map(l => `<div class="logro-item">🏅 ${l.nombre}: ${l.descripcion}</div>`)
+                                   .join('');
+        }
+
+        function cambiarTema() {
+            document.body.classList.toggle('tema-claro');
+            document.querySelector('.boton-tema').textContent = 
+                document.body.classList.contains('tema-claro') ? '🌞' : '🌑';
+        }
+
+        function actualizarUI() {
+            document.getElementById('puntos').textContent = puntos;
+            document.getElementById('vidas').textContent = '❤️'.repeat(vidas);
+            document.getElementById('entrada-respuesta').value = '';
         }
 
         window.onload = () => {
-            iniciarJuego();
-            mostrarLogrosIniciales();
+            actualizarLogros();
         };
-
-        function mostrarLogrosIniciales() {
-            const listaLogros = document.getElementById('lista-logros');
-            logros.forEach(logro => {
-                if (logro.desbloqueado) {
-                    const logroItem = document.createElement('li');
-                    logroItem.innerHTML = `<span>${logro.nombre}</span><span>${logro.descripcion}</span>`;
-                    listaLogros.appendChild(logroItem);
-                }
-            });
-        }
     </script>
 </body>
 </html>
