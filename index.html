@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Acertijos Mágicos Animados</title>
+    <title>Acertijos Mágicos</title>
     <style>
         :root {
             --color-correcto: #4CAF50;
@@ -172,6 +172,16 @@
             to { text-shadow: 0 0 20px currentColor; }
         }
 
+        footer {
+            margin-top: auto;
+            padding: 1.5rem;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            text-align: center;
+            width: 100%;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
         @media (max-width: 768px) {
             .pantalla {
                 padding: 1.5rem;
@@ -196,17 +206,11 @@
                 gap: 1rem;
                 font-size: 1rem;
             }
-        }
 
-        /* Nuevas animaciones */
-        @keyframes titileAnim {
-            from { letter-spacing: -10px; opacity: 0; }
-            to { letter-spacing: normal; opacity: 1; }
-        }
-
-        @keyframes botonInicio {
-            from { transform: scale(0) rotate(180deg); }
-            to { transform: scale(1) rotate(0); }
+            footer {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
         }
 
         @keyframes pulseCorrecto {
@@ -226,8 +230,8 @@
 </head>
 <body>
     <div class="pantalla" id="bienvenida">
-        <h1 style="animation: titileAnim 1s ease-out;">🔮 Acertijos Mágicos 🔮</h1>
-        <button class="boton" id="btnJugar" style="animation: botonInicio 1s 0.3s both;">¡JUGAR!</button>
+        <h1 style="animation: aparecer 1s ease-out;">🔮 Acertijos Mágicos 🔮</h1>
+        <button class="boton" id="btnJugar" style="animation: aparecer 1s 0.3s both;">¡JUGAR!</button>
     </div>
 
     <div class="pantalla" id="juego" style="display: none;">
@@ -269,7 +273,7 @@
         </table>
 
         <button class="boton" onclick="location.reload()">Reintentar</button>
-        <button class="boton" onclick="window.open('https://www.youtube.com/watch?v=QvdqKV3Bhcs')">Castigo</button>
+        <button class="boton" onclick="window.open('https://youtu.be/QvdqKV3Bhcs')">Castigo</button>
     </div>
 
     <div class="pantalla" id="pantalla-victoria" style="display: none;">
@@ -287,116 +291,41 @@
         </table>
 
         <button class="boton" onclick="location.reload()">Jugar de nuevo</button>
-        <button class="boton" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ">Victoria</button>
+        <button class="boton" onclick="window.open('https://youtu.be/xvFZjo5PgG0&pp')">Victoria</button>
     </div>
 
+    <footer>
+        Todos los derechos reservados © Anthony Network<br>
+    </footer>
+
     <script>
-        // Configuración del juego
         let puntos = 0;
         let vidas = 3;
         let combo = 0;
-        let tiempoRestante = 30;
+        let tiempoRestante = 70;
         let intervalo;
         let acertijoActual = 0;
         let logrosDesbloqueados = new Set();
-        let contadorCategorias = {
-            naturaleza: 0,
-            objetos: 0,
-            abstracto: 0
-        };
+        let contadorCategorias = { naturaleza: 0, objetos: 0, abstracto: 0 };
 
         const acertijos = [
-            { 
-                categoria: 'naturaleza',
-                pregunta: "Blanco por dentro, verde por fuera. Si no lo sabes, espera.", 
-                respuesta: "pera", 
-                pista: "Es una fruta" 
-            },
-            { 
-                categoria: 'objetos',
-                pregunta: "Tengo hojas sin ser árbol, hablo sin tener voz. ¿Qué soy?", 
-                respuesta: "libro", 
-                pista: "Se lee" 
-            },
-            { 
-                categoria: 'abstracto',
-                pregunta: "Cuanto más quito, más grande me hago.", 
-                respuesta: "agujero", 
-                pista: "Espacio vacío" 
-            },
-            { 
-                categoria: 'naturaleza',
-                pregunta: "Oro parece, plata no es. El que no lo adivine, bien tonto es.", 
-                respuesta: "plátano", 
-                pista: "Maduro es dulce" 
-            },
-            { 
-                categoria: 'objetos',
-                pregunta: "Va subiendo y bajando, pero nunca se mueve.", 
-                respuesta: "escalera", 
-                pista: "Tiene peldaños" 
-            },
-            { 
-                categoria: 'abstracto',
-                pregunta: "Lo tienes pero no lo puedes prestar.", 
-                respuesta: "sombra", 
-                pista: "Sigue tu movimiento" 
-            },
-            { 
-                categoria: 'naturaleza',
-                pregunta: "Redondo como la luna, lleno de estrellas, aunque es de día.", 
-                respuesta: "sandía", 
-                pista: "Tiene pepitas negras" 
-            },
-            { 
-                categoria: 'objetos',
-                pregunta: "Entra duro y sale blando.", 
-                respuesta: "pan", 
-                pista: "Se hornea" 
-            },
-            { 
-                categoria: 'abstracto',
-                pregunta: "Se puede ver en el agua, pero nunca se moja.", 
-                respuesta: "reflejo", 
-                pista: "Es una imagen" 
-            },
-            { 
-                categoria: 'naturaleza',
-                pregunta: "Blanco fue mi nacimiento, verde me hice al crecer, negro me volví al morir.", 
-                respuesta: "carbón", 
-                pista: "Usado para fuego" 
-            }
+            { categoria: 'naturaleza', pregunta: "Blanco por dentro, verde por fuera. Si no lo sabes, espera.", respuesta: "pera", pista: "Es una fruta" },
+            { categoria: 'objetos', pregunta: "Tengo hojas sin ser árbol, hablo sin tener voz. ¿Qué soy?", respuesta: "libro", pista: "Se lee" },
+            { categoria: 'abstracto', pregunta: "Cuanto más quito, más grande me hago.", respuesta: "agujero", pista: "Espacio vacío" },
+            { categoria: 'naturaleza', pregunta: "Oro parece, plata no es. El que no lo adivine, bien tonto es.", respuesta: "platano", pista: "Maduro es dulce" },
+            { categoria: 'objetos', pregunta: "Va subiendo y bajando, pero nunca se mueve.", respuesta: "escalera", pista: "Tiene peldaños" },
+            { categoria: 'abstracto', pregunta: "Lo tienes pero no lo puedes prestar.", respuesta: "sombra", pista: "Sigue tu movimiento" },
+            { categoria: 'naturaleza', pregunta: "Redondo como la luna, lleno de estrellas, aunque es de día.", respuesta: "sandía", pista: "Tiene pepitas negras" },
+            { categoria: 'objetos', pregunta: "Entra duro y sale blando.", respuesta: "pan", pista: "Se hornea" },
+            { categoria: 'abstracto', pregunta: "Se puede ver en el agua, pero nunca se moja.", respuesta: "reflejo", pista: "Es una imagen" },
+            { categoria: 'naturaleza', pregunta: "Blanco fue mi nacimiento, verde me hice al crecer, negro me volví al morir.", respuesta: "carbón", pista: "Usado para fuego" }
         ];
 
         const logros = [
-            {
-                id: 'naturaleza-3',
-                nombre: '🌿 Maestro de la Naturaleza',
-                descripcion: 'Resuelve 3 acertijos de naturaleza',
-                icono: '🌿',
-                condicion: () => contadorCategorias.naturaleza >= 3
-            },
-            {
-                id: 'objetos-3',
-                nombre: '📦 Rey de los Objetos',
-                descripcion: 'Resuelve 3 acertijos de objetos',
-                icono: '📦',
-                condicion: () => contadorCategorias.objetos >= 3
-            },
-            {
-                id: 'abstracto-3',
-                nombre: '🌀 Pensador Abstracto',
-                descripcion: 'Resuelve 3 acertijos abstractos',
-                icono: '🌀',
-                condicion: () => contadorCategorias.abstracto >= 3
-            },
-            {
-                id: 'combo-5',
-                nombre: '🔥 Racha de Fuego',
-                descripcion: 'Alcanza un combo de 5 respuestas correctas',
-                icono: '🔥',
-                condicion: () => combo >= 5
-            }
+            { id: 'naturaleza-3', nombre: '🌿 Maestro Naturaleza', descripcion: '3 acertijos de naturaleza', icono: '🌿', condicion: () => contadorCategorias.naturaleza >= 3 },
+            { id: 'objetos-3', nombre: '📦 Rey Objetos', descripcion: '3 acertijos de objetos', icono: '📦', condicion: () => contadorCategorias.objetos >= 3 },
+            { id: 'abstracto-3', nombre: '🌀 Pensador Abstracto', descripcion: '3 acertijos abstractos', icono: '🌀', condicion: () => contadorCategorias.abstracto >= 3 },
+            { id: 'combo-5', nombre: '🔥 Racha de Fuego', descripcion: 'Combo de 5 respuestas', icono: '🔥', condicion: () => combo >= 5 }
         ];
 
         const teamMembers = [
@@ -411,7 +340,6 @@
             { name: 'Anthony', role: 'rey 👑 Anti furros', class: 'anti-furro' }
         ];
 
-        // Funciones del juego
         function comenzarJuego() {
             document.getElementById('bienvenida').style.display = 'none';
             document.getElementById('juego').style.display = 'block';
@@ -424,30 +352,26 @@
             document.getElementById('entrada-respuesta').value = '';
             document.getElementById('pistas').textContent = '';
             document.getElementById('barra-tiempo').style.width = '100%';
-            tiempoRestante = 30;
+             tiempoRestante = 70;
         }
 
         function iniciarTemporizador() {
             clearInterval(intervalo);
             intervalo = setInterval(() => {
                 tiempoRestante -= 0.1;
-                document.getElementById('barra-tiempo').style.width = (tiempoRestante / 30 * 100) + '%';
-                
-                if(tiempoRestante <= 0) {
-                    clearInterval(intervalo);
-                    perderVida();
-                }
+                document.getElementById('barra-tiempo').style.width = (tiempoRestante / 70 * 100) + '%';
+                if(tiempoRestante <= 0) perderVida();
             }, 100);
         }
 
         function verificarRespuesta() {
             const respuesta = document.getElementById('entrada-respuesta').value.toLowerCase().trim();
-            const categoriaActual = acertijos[acertijoActual].categoria;
+            const categoria = acertijos[acertijoActual].categoria;
             
             if (respuesta === acertijos[acertijoActual].respuesta) {
                 combo++;
                 puntos += Math.floor(tiempoRestante * (acertijoActual + 1) + (combo * 15));
-                contadorCategorias[categoriaActual]++;
+                contadorCategorias[categoria]++;
                 verificarLogros();
                 
                 if(acertijoActual === acertijos.length - 1) {
@@ -467,6 +391,18 @@
             actualizarUI();
         }
 
+        function animarCorrecto() {
+            const acertijo = document.getElementById('acertijo');
+            acertijo.style.animation = 'pulseCorrecto 0.5s';
+            setTimeout(() => acertijo.style.animation = '', 500);
+        }
+
+        function animarError() {
+            const entrada = document.getElementById('entrada-respuesta');
+            entrada.style.animation = 'vibrar 0.3s';
+            setTimeout(() => entrada.style.animation = '', 300);
+        }
+
         function verificarLogros() {
             logros.forEach(logro => {
                 if(!logrosDesbloqueados.has(logro.id) && logro.condicion()) {
@@ -477,12 +413,7 @@
 
         function perderVida() {
             vidas--;
-            if(vidas <= 0) {
-                finDelJuego();
-            } else {
-                mostrarAcertijo();
-                iniciarTemporizador();
-            }
+            vidas <= 0 ? finDelJuego() : (mostrarAcertijo(), iniciarTemporizador());
         }
 
         function usarPista() {
@@ -518,48 +449,27 @@
         }
 
         function poblarTabla(idTabla) {
-            const tbody = document.getElementById(idTabla);
-            tbody.innerHTML = teamMembers.map(miembro => `
-                <tr>
-                    <td class="${miembro.class || ''}">${miembro.name}</td>
-                    <td class="${miembro.class || ''}">${miembro.role}</td>
-                </tr>
+            document.getElementById(idTabla).innerHTML = teamMembers.map(m => `
+                <tr><td class="${m.class || ''}">${m.name}</td><td class="${m.class || ''}">${m.role}</td></tr>
             `).join('');
         }
 
         function mostrarLogros(contenedorId) {
-            const contenedor = document.getElementById(contenedorId);
-            contenedor.innerHTML = logros.map(logro => `
-                <div class="logro ${logrosDesbloqueados.has(logro.id) ? '' : 'bloqueado'}">
-                    <div class="logro-icon">${logro.icono}</div>
-                    <h4>${logro.nombre}</h4>
-                    <p>${logro.descripcion}</p>
-                    <small>${logrosDesbloqueados.has(logro.id) ? 'Desbloqueado!' : 'Bloqueado'}</small>
+            document.getElementById(contenedorId).innerHTML = logros.map(l => `
+                <div class="logro ${logrosDesbloqueados.has(l.id) ? '' : 'bloqueado'}">
+                    <div class="logro-icon">${l.icono}</div>
+                    <h4>${l.nombre}</h4>
+                    <p>${l.descripcion}</p>
+                    <small>${logrosDesbloqueados.has(l.id) ? 'Desbloqueado!' : 'Bloqueado'}</small>
                 </div>
             `).join('');
         }
 
-        // Funciones de animación
-        function animarCorrecto() {
-            const acertijo = document.getElementById('acertijo');
-            acertijo.style.animation = 'pulseCorrecto 0.5s';
-            setTimeout(() => acertijo.style.animation = '', 500);
-        }
-
-        function animarError() {
-            const entrada = document.getElementById('entrada-respuesta');
-            entrada.style.animation = 'vibrar 0.3s';
-            setTimeout(() => entrada.style.animation = '', 300);
-        }
-
-        // Eventos iniciales
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('btnJugar').addEventListener('click', comenzarJuego);
             document.getElementById('btnComprobar').addEventListener('click', verificarRespuesta);
             document.getElementById('btnPista').addEventListener('click', usarPista);
-            document.getElementById('entrada-respuesta').addEventListener('keypress', (e) => {
-                if(e.key === 'Enter') verificarRespuesta();
-            });
+            document.getElementById('entrada-respuesta').addEventListener('keypress', e => e.key === 'Enter' && verificarRespuesta());
         });
     </script>
 </body>
