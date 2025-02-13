@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adivinatrix Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Acertijos Mágicos</title>
     <style>
         :root {
             --color-correcto: #4CAF50;
@@ -15,507 +15,634 @@
             --color-input: #333;
         }
 
-        body.tema-claro {
-            --color-fondo: #f0f0f0;
-            --color-texto: #333;
-            --color-contenedor: rgba(255, 255, 255, 0.9);
-            --color-input: #e0e0e0;
-        }
-
         body {
-            font-family: 'Arial', sans-serif;
-            color: var(--color-texto);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
             margin: 0;
-            padding: 20px;
-            background: linear-gradient(270deg, var(--color-fondo), #2d2d2d, #4CAF50);
-            background-size: 400% 400%;
-            animation: fondoAnimado 15s ease infinite;
-            position: relative;
+            perspective: 1000px;
             overflow-x: hidden;
-            transition: all 0.3s;
+            background: var(--color-fondo);
+            color: var(--color-texto);
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
         }
 
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .pantalla-bienvenida {
+        .capa-parallax {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+            z-index: -2;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease-out;
+            background: radial-gradient(circle, transparent 20%, var(--color-fondo) 80%);
+        }
+
+        .emoji-flotante {
+            position: absolute;
+            font-size: 2rem;
+            animation: flotar 3s ease-in-out forwards;
+            filter: drop-shadow(0 0 8px rgba(255,215,0,0.7));
+            opacity: 0;
+            user-select: none;
             z-index: 1000;
-            animation: aparecerBienvenida 1s ease-out;
         }
 
-        .pantalla-bienvenida.hidden {
-            animation: desaparecerBienvenida 0.8s ease-in forwards;
+        .particula-interactiva {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: gold;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.7;
         }
 
-        .titulo-bienvenida {
-            font-size: 4rem;
+        .pantalla-bienvenida, .pantalla-resultado {
             text-align: center;
-            margin-bottom: 2rem;
-            background: linear-gradient(45deg, #4CAF50, #2196F3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: flotar 3s ease-in-out infinite;
-        }
-
-        .boton-comenzar {
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            border-radius: 30px;
-            background: linear-gradient(45deg, #4CAF50, #2196F3);
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .boton-comenzar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(76,175,80,0.5);
+            padding: 2rem;
+            background: var(--color-contenedor);
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 90%;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1000;
         }
 
         .contenedor-juego {
-            background: var(--color-contenedor);
+            text-align: center;
             padding: 2rem;
+            background: var(--color-contenedor);
             border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            max-width: 600px;
-            width: 90%;
-            position: relative;
-            z-index: 1;
+            margin: 2rem auto;
+            max-width: 90%;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            animation: aparecer 1s ease-out;
-            display: none;
-        }
-
-        @keyframes fondoAnimado {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes aparecer {
-            0% { opacity: 0; transform: translateY(50px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes aparecerBienvenida {
-            0% { opacity: 0; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes desaparecerBienvenida {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.8); display: none; }
-        }
-
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin: 0 0 1.5rem;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-            background: linear-gradient(45deg, #4CAF50, #2196F3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        #acertijo {
-            font-size: 1.5rem;
-            margin: 1rem 0;
-            min-height: 100px;
-            padding: 20px;
-            background: var(--color-input);
-            border-radius: 10px;
-            text-align: center;
-            border: 2px solid rgba(255,255,255,0.1);
-            animation: textoFlotante 3s ease-in-out infinite;
-        }
-
-        @keyframes textoFlotante {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            transition: transform 0.3s;
         }
 
         #tiempo-restante {
-            height: 10px;
-            background: #444;
-            border-radius: 5px;
-            margin: 1.5rem 0;
+            height: 20px;
+            background: var(--color-input);
+            border-radius: 10px;
+            margin: 1rem auto;
             overflow: hidden;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
         }
 
         #barra-tiempo {
             height: 100%;
+            background: var(--color-timer);
             width: 100%;
-            background: linear-gradient(90deg, var(--color-timer), #21b0f3);
-            transition: width 1s linear;
+            transition: width 0.1s linear;
         }
 
         #entrada-respuesta {
-            width: 100%;
+            width: 80%;
             padding: 15px;
-            font-size: 1.2rem;
             margin: 1rem 0;
             border: none;
-            border-radius: 8px;
-            text-align: center;
+            border-radius: 25px;
             background: var(--color-input);
             color: var(--color-texto);
+            font-size: 1.2rem;
+            text-align: center;
             transition: transform 0.3s;
         }
 
-        #entrada-respuesta:focus {
-            outline: none;
-            transform: scale(1.02);
-            box-shadow: 0 0 15px rgba(33,150,243,0.3);
+        .boton {
+            background: var(--color-timer);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
         .estadisticas {
             display: flex;
-            justify-content: space-between;
-            margin: 1.5rem 0;
-            font-size: 1.4rem;
-        }
-
-        .vidas {
-            color: var(--color-error);
-        }
-
-        .boton {
-            padding: 12px 30px;
-            margin: 10px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            background: linear-gradient(45deg, var(--color-timer), #21b0f3);
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .boton:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-
-        .contenedor-logros {
-            background: var(--color-contenedor);
-            padding: 1rem;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            max-width: 600px;
-            width: 90%;
-            margin-top: 20px;
-            backdrop-filter: blur(10px);
-            z-index: 1;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .logro-item {
-            background: linear-gradient(45deg, rgba(76,175,80,0.2), rgba(33,150,243,0.2));
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            opacity: 0;
-            transform: translateX(-50px);
-            animation: aparecerLogro 0.5s forwards;
-        }
-
-        @keyframes aparecerLogro {
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .boton-tema {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--color-timer), #21b0f3);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
-            transition: all 0.3s;
-            z-index: 2;
-            border: none;
-            color: white;
+            gap: 2rem;
+            margin: 1rem 0;
+            font-size: 1.2rem;
         }
 
-        .notificacion-logro {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(76,175,80,0.9);
-            color: white;
+        #pantalla-derrota {
+            background: linear-gradient(45deg, #8B0000, #4a0000);
+            display: none;
+        }
+
+        #pantalla-victoria {
+            background: linear-gradient(45deg, #006400, #003300);
+            display: none;
+        }
+
+        .boton-castigo {
+            background: #ff0000;
             padding: 15px 30px;
-            border-radius: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            animation: aparecerNotificacion 0.5s ease-out;
-            z-index: 3;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            margin-top: 20px;
         }
 
-        @keyframes aparecerNotificacion {
-            0% { top: -100px; }
-            100% { top: 20px; }
+        .boton-premio {
+            background: #FFD700;
+            color: #000;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .copyright {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.5);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            animation: flotar-copyright 3s ease-in-out infinite;
+        }
+
+        @keyframes flotar {
+            0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+            100% { opacity: 0; transform: translateY(-150px) rotate(360deg) scale(2); }
+        }
+
+        @keyframes combo-fire {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        @keyframes flotar-copyright {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .contenedor-juego, .pantalla-bienvenida, .pantalla-resultado {
+                padding: 1.5rem;
+                margin: 1rem auto;
+                max-width: 95%;
+            }
+
+            h1 {
+                font-size: 1.8rem !important;
+                margin: 0.5rem 0;
+            }
+
+            #entrada-respuesta {
+                width: 95%;
+                font-size: 1.1rem;
+                padding: 12px;
+            }
+
+            .boton {
+                padding: 12px 20px;
+                margin: 8px;
+                font-size: 1rem;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .estadisticas {
+                flex-direction: column;
+                gap: 1rem;
+                font-size: 1.1rem;
+            }
+
+            #tiempo-restante {
+                height: 15px;
+            }
+
+            .copyright {
+                font-size: 0.75rem;
+                padding: 10px;
+            }
+
+            .emoji-flotante {
+                font-size: 1.5rem;
+            }
+
+            .boton-castigo, .boton-premio {
+                padding: 12px 25px;
+                font-size: 1rem;
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem !important;
+            }
+
+            #acertijo {
+                font-size: 1rem !important;
+                margin: 1rem 0;
+            }
+
+            .contenedor-juego {
+                padding: 1rem;
+            }
+
+            .estadisticas {
+                font-size: 1rem;
+            }
+
+            #pistas {
+                font-size: 0.9rem;
+            }
+
+            .copyright {
+                font-size: 0.7rem;
+                padding: 8px;
+            }
+
+            .boton {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="capa-parallax" id="parallax1"></div>
+    <div class="capa-parallax" id="parallax2"></div>
+    <div id="particles-js"></div>
+
     <div class="pantalla-bienvenida" id="bienvenida">
-        <h1 class="titulo-bienvenida">🔮 ADIVINATRIX PRO 🔮</h1>
-        <button class="boton-comenzar" onclick="comenzarJuego()">¡JUGAR!</button>
+        <h1>🔮 Acertijos Mágicos 🔮</h1>
+        <button class="boton" id="btnJugar">¡JUGAR!</button>
     </div>
 
-    <div id="particles-js"></div>
-    
-    <div class="contenedor-juego" id="juego">
-        <button class="boton-tema" onclick="cambiarTema()">🌓</button>
-        <h1>🔮 ADIVINATRIX PRO 🔮</h1>
+    <div class="contenedor-juego" id="juego" style="display: none;">
+        <h1>🔮 Acertijos Mágicos 🔮</h1>
         
         <div class="estadisticas">
-            <div class="puntuacion">⭐ <span id="puntos">0</span></div>
-            <div class="vidas">❤️ <span id="vidas">3</span></div>
+            <div>⭐ <span id="puntos">0</span></div>
+            <div>❤️ <span id="vidas">3</span></div>
+            <div>🔥 <span id="combo">0</span>x</div>
         </div>
 
         <div id="tiempo-restante">
             <div id="barra-tiempo"></div>
         </div>
 
-        <div id="acertijo"></div>
-        <div id="pistas"></div>
+        <div id="acertijo" style="margin: 2rem 0; font-size: 1.2rem;"></div>
+        <div id="pistas" style="color: #888;"></div>
 
-        <input type="text" id="entrada-respuesta" placeholder="Escribe tu respuesta...">
+        <input type="text" id="entrada-respuesta" placeholder="Escribe tu respuesta..." autocomplete="off">
         
-        <div style="text-align: center; margin-top: 1.5rem;">
-            <button class="boton" onclick="verificarRespuesta()">COMPROBAR</button>
-            <button class="boton" onclick="usarPista()">PISTA (-10⭐)</button>
+        <div style="margin-top: 1.5rem;">
+            <button class="boton" id="btnComprobar">COMPROBAR</button>
+            <button class="boton" id="btnPista">PISTA (-10⭐)</button>
         </div>
     </div>
 
-    <div class="contenedor-logros">
-        <h2>🏆 LOGROS DESBLOQUEADOS 🏆</h2>
-        <div id="lista-logros"></div>
+    <div class="pantalla-resultado" id="pantalla-derrota">
+        <h1>💀 GAME OVER 💀</h1>
+        <p>Puntuación final: <span id="puntos-finales">0</span> ⭐</p>
+        <button class="boton-castigo" onclick="redirigirCastigo()">ESTE ES EL CASTIGO</button>
+        <button class="boton" onclick="location.reload()">Reintentar</button>
+    </div>
+
+    <div class="pantalla-resultado" id="pantalla-victoria">
+        <h1>🏆 VICTORIA ÉPICA 🏆</h1>
+        <p>Puntuación total: <span id="puntos-victoria">0</span> ⭐</p>
+        <button class="boton-premio" onclick="redirigirPremio()">AQUÍ ESTÁ TU PREMIO</button>
+        <button class="boton" onclick="location.reload()">Jugar de nuevo</button>
+    </div>
+
+    <div class="copyright">
+        © Anthony Network - Todos los derechos reservados
     </div>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        function comenzarJuego() {
-            const bienvenida = document.getElementById('bienvenida');
-            const juego = document.getElementById('juego');
-            bienvenida.classList.add('hidden');
-            setTimeout(() => {
-                juego.style.display = 'block';
-                iniciarJuego();
-            }, 800);
-        }
-
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80 },
-                color: { value: '#4CAF50' },
-                shape: { type: 'circle' },
-                opacity: { value: 0.5 },
-                size: { value: 3 },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: 'none',
-                    random: false,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false
-                }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: {
-                    onhover: { enable: true, mode: 'repulse' },
-                    onclick: { enable: true, mode: 'push' },
-                    resize: true
-                }
-            }
-        });
-
-        const acertijos = [
-            { pregunta: "Blanco por dentro, verde por fuera. Si quieres que te lo diga, espera.", respuesta: "pera", pistas: ["Es una fruta", "Comienza con P"] },
-            { pregunta: "Oro parece, plata no es. El que no lo adivine, bien tonto es.", respuesta: "plátano", pistas: ["Es una fruta tropical", "Tiene forma curva"] },
-            { pregunta: "Tengo hojas pero no soy árbol, tengo páginas pero no soy libro.", respuesta: "libreta", pistas: ["Se usa para escribir", "De papel"] },
-            { pregunta: "Soy ligero como una pluma pero nadie puede sostenerme por mucho tiempo.", respuesta: "sueño", pistas: ["Relacionado con dormir", "Intangible"] },
-            { pregunta: "Cuanto más quitas, más grande se hace. ¿Qué es?", respuesta: "agujero", pistas: ["Espacio vacío", "Se hace con una pala"] }
-        ];
-
-        const logros = [
-            { nombre: "Primer Acierto", descripcion: "Acierta tu primer acertijo", desbloqueado: false },
-            { nombre: "Racha de 3", descripcion: "Acierta 3 veces seguidas", desbloqueado: false },
-            { nombre: "Maestro del Tiempo", descripcion: "Resuelve con >20 segundos", desbloqueado: false },
-            { nombre: "Sin Pistas", descripcion: "Completa un nivel sin pistas", desbloqueado: false }
-        ];
-
         let puntos = 0;
         let vidas = 3;
+        let combo = 0;
         let tiempoRestante = 30;
         let intervalo;
         let acertijoActual = 0;
-        let pistasUsadas = 0;
-        let racha = 0;
+        let bonusActivo = false;
 
-        function iniciarJuego() {
-            document.getElementById('acertijo').textContent = acertijos[acertijoActual].pregunta;
-            document.getElementById('pistas').textContent = '';
-            document.getElementById('vidas').textContent = '❤️'.repeat(vidas);
-            tiempoRestante = puntos > 50 ? 20 : 30;
+        const acertijos = [
+            {
+                pregunta: "Blanco por dentro, verde por fuera. Si no lo sabes, espera.",
+                respuesta: "pera",
+                pista: "Es una fruta"
+            },
+            {
+                pregunta: "Oro parece, plata no es. El que no lo adivine, bien tonto es.",
+                respuesta: "plátano",
+                pista: "Maduro es dulce"
+            },
+            {
+                pregunta: "Redondo como la luna, lleno de estrellas, aunque es de día.",
+                respuesta: "sandía",
+                pista: "Tiene pepitas negras"
+            },
+            {
+                pregunta: "Tengo hojas sin ser árbol, hablo sin tener voz. ¿Qué soy?",
+                respuesta: "libro",
+                pista: "Se lee"
+            },
+            {
+                pregunta: "Blanco fue mi nacimiento, verde me hice al crecer, negro me volví al morir.",
+                respuesta: "carbón",
+                pista: "Usado para fuego"
+            },
+            {
+                pregunta: "Va subiendo y bajando, pero nunca se mueve.",
+                respuesta: "escalera",
+                pista: "Tiene peldaños"
+            },
+            {
+                pregunta: "Cuanto más quito, más grande me hago.",
+                respuesta: "agujero",
+                pista: "Espacio vacío"
+            },
+            {
+                pregunta: "Lo tienes pero no lo puedes prestar.",
+                respuesta: "sombra",
+                pista: "Sigue tu movimiento"
+            },
+            {
+                pregunta: "Entra duro y sale blando.",
+                respuesta: "pan",
+                pista: "Se hornea"
+            },
+            {
+                pregunta: "Se puede ver en el agua, pero nunca se moja.",
+                respuesta: "reflejo",
+                pista: "Es una imagen"
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('btnJugar').addEventListener('click', comenzarJuego);
+            document.getElementById('btnComprobar').addEventListener('click', verificarRespuesta);
+            document.getElementById('btnPista').addEventListener('click', usarPista);
+            document.getElementById('entrada-respuesta').addEventListener('focus', crearParticulas);
+        });
+
+        function comenzarJuego() {
+            document.getElementById('bienvenida').style.display = 'none';
+            document.getElementById('juego').style.display = 'block';
             iniciarTemporizador();
+            mostrarAcertijo();
+        }
+
+        function mostrarAcertijo() {
+            document.getElementById('acertijo').textContent = acertijos[acertijoActual].pregunta;
+            document.getElementById('entrada-respuesta').value = '';
+            document.getElementById('pistas').textContent = '';
+            tiempoRestante = 30;
+            document.getElementById('barra-tiempo').style.width = '100%';
         }
 
         function iniciarTemporizador() {
             clearInterval(intervalo);
-            document.getElementById('barra-tiempo').style.width = '100%';
             intervalo = setInterval(() => {
-                tiempoRestante--;
-                document.getElementById('barra-tiempo').style.width = `${(tiempoRestante / 30) * 100}%`;
-                if (tiempoRestante <= 0) penalizarTiempo();
-            }, 1000);
+                tiempoRestante -= 0.1;
+                document.getElementById('barra-tiempo').style.width = (tiempoRestante / 30 * 100) + '%';
+                
+                if(tiempoRestante <= 0) {
+                    clearInterval(intervalo);
+                    vidas--;
+                    actualizarUI();
+                    if(vidas > 0) siguienteAcertijo();
+                    else finDelJuego();
+                }
+            }, 100);
         }
 
         function verificarRespuesta() {
             const respuesta = document.getElementById('entrada-respuesta').value.toLowerCase().trim();
-            if (respuesta === acertijos[acertijoActual].respuesta) {
-                puntos += tiempoRestante * (acertijoActual + 1);
-                racha++;
-                if (pistasUsadas === 0) desbloquearLogro(3);
-                siguienteAcertijo();
-                confetti({ particleCount: 100, spread: 70 });
-            } else {
-                vidas--;
-                racha = 0;
-                actualizarUI();
-                if (vidas <= 0) finJuego();
-            }
-            verificarLogros();
-            actualizarUI();
-        }
-
-        function usarPista() {
-            if (puntos >= 10 && pistasUsadas < 2) {
-                puntos -= 10;
-                pistasUsadas++;
-                document.getElementById('pistas').textContent += acertijos[acertijoActual].pistas[pistasUsadas - 1] + ' ';
-                actualizarUI();
-            }
-        }
-
-        function siguienteAcertijo() {
-            clearInterval(intervalo);
-            acertijoActual++;
-            pistasUsadas = 0;
             
-            if (acertijoActual < acertijos.length) {
-                iniciarJuego();
-            } else {
-                finJuego();
-            }
-        }
-
-        function penalizarTiempo() {
-            vidas--;
-            actualizarUI();
-            if (vidas <= 0) {
-                finJuego();
-            } else {
+            if (respuesta === acertijos[acertijoActual].respuesta) {
+                combo++;
+                puntos += Math.floor(tiempoRestante * (acertijoActual + 1) + (combo * 15));
+                crearEfectosExito();
+                actualizarCombo();
+                
+                if(acertijoActual === acertijos.length - 1) {
+                    victoriaJuego();
+                    return;
+                }
+                
                 siguienteAcertijo();
+                confetti({ 
+                    particleCount: 100 + (combo * 20),
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    colors: ['#ff0000', '#00ff00', '#0000ff']
+                });
+            } else {
+                combo = 0;
+                vidas--;
+                crearEfectosError();
+                if(vidas <= 0) finDelJuego();
+            }
+            
+            if (puntos >= 100) activarBonus();
+            actualizarUI();
+            vibrar(respuesta === acertijos[acertijoActual].respuesta ? 50 : 200);
+        }
+
+        function crearEfectosExito() {
+            ['✨','🎉','💎','🌟','🚀'].forEach((emoji, i) => {
+                const elemento = document.createElement('div');
+                elemento.className = 'emoji-flotante';
+                elemento.textContent = emoji;
+                elemento.style.left = `${Math.random() * 80 + 10}%`;
+                elemento.style.animationDelay = `${i * 0.2}s`;
+                elemento.style.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                document.body.appendChild(elemento);
+            });
+        }
+
+        function crearEfectosError() {
+            for(let i = 0; i < 5; i++) {
+                const particula = document.createElement('div');
+                particula.className = 'particula-interactiva';
+                particula.style.left = `${Math.random() * 90 + 5}%`;
+                particula.style.top = `${Math.random() * 90 + 5}%`;
+                particula.style.background = '#ff0000';
+                document.body.appendChild(particula);
+                
+                particula.animate([
+                    { transform: 'scale(1)', opacity: 1 },
+                    { transform: 'scale(3)', opacity: 0 }
+                ], { duration: 1000 }).onfinish = () => particula.remove();
             }
         }
 
-        function finJuego() {
-            clearInterval(intervalo);
-            alert(`¡Juego terminado! Puntuación: ${puntos}`);
-            reiniciarJuego();
+        function actualizarCombo() {
+            document.getElementById('combo').textContent = combo;
+            if(combo > 0) {
+                const efecto = document.createElement('div');
+                efecto.textContent = '🔥'.repeat(Math.min(Math.floor(combo/2), 5));
+                efecto.style.position = 'absolute';
+                efecto.style.left = `${Math.random() * 70 + 15}%`;
+                efecto.style.color = `hsl(${combo * 10}, 100%, 50%)`;
+                efecto.style.animation = 'combo-fire 0.8s ease-out';
+                document.body.appendChild(efecto);
+                
+                if(combo % 5 === 0) vibrar(50);
+            }
         }
 
-        function reiniciarJuego() {
-            puntos = 0;
-            vidas = 3;
-            acertijoActual = 0;
-            actualizarUI();
-            iniciarJuego();
+        function activarBonus() {
+            if (!bonusActivo) {
+                bonusActivo = true;
+                const contenedor = document.getElementById('acertijo');
+                contenedor.innerHTML = '<div style="font-size: 1.5rem;">¡REVIENTA LOS GLOBOS! 🎯</div>';
+                
+                for (let i = 0; i < 10; i++) {
+                    const globo = document.createElement('div');
+                    globo.className = 'emoji-flotante';
+                    globo.textContent = Math.random() > 0.2 ? '🎈' : '💣';
+                    globo.style.cssText = `
+                        left:${Math.random() * 80}%;
+                        animation-duration:${Math.random() * 2 + 1}s;
+                        font-size: ${Math.random() * 2 + 2}rem;
+                        cursor: pointer;
+                    `;
+                    
+                    globo.onclick = () => {
+                        if(globo.textContent === '💣') {
+                            vidas = Math.max(0, vidas - 1);
+                            actualizarUI();
+                        } else {
+                            puntos += 30;
+                        }
+                        globo.textContent = '💥';
+                        setTimeout(() => globo.remove(), 300);
+                        vibrar(50);
+                    };
+                    
+                    contenedor.appendChild(globo);
+                }
+                
+                setTimeout(() => {
+                    contenedor.innerHTML = acertijos[acertijoActual].pregunta;
+                    bonusActivo = false;
+                }, 7000);
+            }
         }
 
-        function verificarLogros() {
-            if (puntos > 0 && !logros[0].desbloqueado) desbloquearLogro(0);
-            if (racha >= 3 && !logros[1].desbloqueado) desbloquearLogro(1);
-            if (tiempoRestante > 20 && !logros[2].desbloqueado) desbloquearLogro(2);
+        function vibrar(duracion) {
+            if ('vibrate' in navigator) navigator.vibrate(duracion);
         }
 
-        function desbloquearLogro(indice) {
-            logros[indice].desbloqueado = true;
-            const notificacion = document.createElement('div');
-            notificacion.className = 'notificacion-logro';
-            notificacion.textContent = `🏆 ${logros[indice].nombre} DESBLOQUEADO!`;
-            document.body.appendChild(notificacion);
-            setTimeout(() => notificacion.remove(), 3000);
-            actualizarLogros();
-        }
-
-        function actualizarLogros() {
-            const lista = document.getElementById('lista-logros');
-            lista.innerHTML = logros.filter(l => l.desbloqueado)
-                                   .map(l => `<div class="logro-item">🏅 ${l.nombre}: ${l.descripcion}</div>`)
-                                   .join('');
-        }
-
-        function cambiarTema() {
-            document.body.classList.toggle('tema-claro');
-            document.querySelector('.boton-tema').textContent = 
-                document.body.classList.contains('tema-claro') ? '🌞' : '🌑';
+        function crearParticulas(e) {
+            if (window.innerWidth > 768) {
+                for(let i = 0; i < 20; i++) {
+                    const particula = document.createElement('div');
+                    particula.className = 'particula-interactiva';
+                    particula.style.left = `${e.clientX}px`;
+                    particula.style.top = `${e.clientY}px`;
+                    document.body.appendChild(particula);
+                    
+                    particula.animate([
+                        { transform: 'scale(1)', opacity: 1 },
+                        { transform: `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(0)`, opacity: 0 }
+                    ], { duration: 1000 }).onfinish = () => particula.remove();
+                }
+            }
         }
 
         function actualizarUI() {
             document.getElementById('puntos').textContent = puntos;
-            document.getElementById('vidas').textContent = '❤️'.repeat(vidas);
-            document.getElementById('entrada-respuesta').value = '';
+            document.getElementById('vidas').textContent = vidas;
+            document.getElementById('combo').textContent = combo;
         }
 
-        window.onload = () => {
-            actualizarLogros();
-        };
+        function siguienteAcertijo() {
+            acertijoActual++;
+            mostrarAcertijo();
+            iniciarTemporizador();
+        }
+
+        function usarPista() {
+            if(puntos >= 10) {
+                puntos -= 10;
+                document.getElementById('pistas').textContent = acertijos[acertijoActual].pista;
+                actualizarUI();
+            }
+        }
+
+        function finDelJuego() {
+            clearInterval(intervalo);
+            document.getElementById('juego').style.display = 'none';
+              document.getElementById('pantalla-derrota').style.display = 'block';
+         document.getElementById('puntos-finales').textContent = puntos;
+        }
+
+        function victoriaJuego() {
+            clearInterval(intervalo);
+            document.getElementById('juego').style.display = 'none';
+            document.getElementById('pantalla-victoria').style.display = 'block';
+            document.getElementById('puntos-victoria').textContent = puntos;
+            confetti({ 
+                particleCount: 500,
+                spread: 200,
+                origin: { y: 0.6 }
+            });
+        }
+
+        function redirigirCastigo() {
+            window.open('https://www.youtube.com/watch?v=QvdqKV3Bhcs', '_blank');
+        }
+
+        function redirigirPremio() {
+            window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            
+            document.getElementById('parallax1').style.transform = 
+                `rotateX(${y}deg) rotateY(${x}deg) translateZ(-50px)`;
+            document.getElementById('parallax2').style.transform = 
+                `rotateX(${y * 0.5}deg) rotateY(${x * 0.5}deg) translateZ(-100px) scale(1.5)`;
+        });
+
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 150 },
+                color: { value: '#4CAF50' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.7 },
+                size: { value: 3 },
+                move: {
+                    enable: true,
+                    speed: 3,
+                    direction: 'none',
+                    out_mode: 'bounce',
+                    attract: { enable: true, rotateX: 600, rotateY: 1200 }
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" }
+                }
+            }
+        });
     </script>
 </body>
 </html>
