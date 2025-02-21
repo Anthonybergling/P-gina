@@ -2,475 +2,465 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Acertijos Mágicos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTS Quiz Challenge</title>
     <style>
         :root {
-            --color-correcto: #4CAF50;
-            --color-error: #f44336;
-            --color-timer: #2196F3;
-            --color-fondo: #1a1a1a;
-            --color-texto: white;
-            --color-contenedor: rgba(45,45,45,0.9);
-            --color-input: #333;
+            --purple: #8A2BE2;
+            --pink: #FF69B4;
+            --main-font: 'Arial', sans-serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: var(--color-fondo);
-            color: var(--color-texto);
+            font-family: var(--main-font);
+            background: linear-gradient(45deg, #ffdead, #f5f5dc);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
+            padding: 20px;
+            transition: background 0.5s;
         }
 
-        .pantalla {
-            width: 95%;
+        .container {
             max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
             padding: 2rem;
-            margin: 2rem 0;
-            background: var(--color-contenedor);
             border-radius: 15px;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: none;
             text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-            animation: aparecer 0.8s ease-out;
         }
 
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        .active {
+            display: block;
         }
 
-        #tiempo-restante {
-            width: 100%;
-            height: 20px;
-            background: var(--color-input);
-            border-radius: 10px;
-            margin: 1.5rem 0;
-            overflow: hidden;
+        h1 {
+            color: var(--purple);
+            margin-bottom: 1rem;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        #barra-tiempo {
-            height: 100%;
-            background: var(--color-timer);
-            transition: width 0.1s linear;
-            animation: brillo 1.5s infinite alternate;
-        }
-
-        @keyframes brillo {
-            from { filter: brightness(1); }
-            to { filter: brightness(1.2); }
-        }
-
-        #entrada-respuesta {
-            width: 100%;
-            max-width: 400px;
-            padding: 15px;
-            margin: 1rem 0;
+        .btn {
+            background: linear-gradient(45deg, var(--purple), var(--pink));
+            color: white;
             border: none;
+            padding: 15px 30px;
             border-radius: 25px;
-            background: var(--color-input);
-            color: var(--color-texto);
-            font-size: 1.1rem;
-            text-align: center;
-            transition: all 0.3s;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 10px;
+            max-width: 300px;
+            font-size: 1.1em;
         }
 
-        #entrada-respuesta:focus {
-            outline: 2px solid var(--color-timer);
+        .btn:hover {
             transform: scale(1.05);
         }
 
-        .boton {
-            background: var(--color-timer);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            margin: 0.5rem;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
+        #riddle-container {
+            font-size: 1.2em;
+            margin: 20px 0;
+            min-height: 100px;
+            font-weight: bold;
         }
 
-        .boton:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .estadisticas {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 1.5rem 0;
-            font-size: 1.2rem;
-            flex-wrap: wrap;
-        }
-
-        .team-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-family: 'Courier New', monospace;
-            animation: deslizarDerecha 0.8s ease-out;
-        }
-
-        @keyframes deslizarDerecha {
-            from { transform: translateX(-50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .logros-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .logro {
-            padding: 1rem;
-            background: rgba(255,255,255,0.1);
+        #score-board {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
             border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+
+        .options-container {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            background: rgba(139, 0, 139, 0.1);
+            color: var(--purple);
+            border: 2px solid var(--purple);
+            padding: 10px;
+            border-radius: 15px;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        .logro-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            animation: flotar 3s ease-in-out infinite;
+        .option-btn:hover {
+            background: var(--purple);
+            color: white;
         }
 
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        #timer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .furra-reina {
-            color: #ff69b4;
-            text-shadow: 0 0 10px #ff69b4;
-            animation: brilloTexto 1.5s infinite alternate;
+        #lives {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            font-size: 1.5em;
         }
 
-        .anti-furro {
-            color: #FFD700;
-            text-shadow: 0 0 10px #FFD700;
-            animation: brilloTexto 1.5s infinite alternate;
+        .powerup {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: gold;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
-        @keyframes brilloTexto {
-            from { text-shadow: 0 0 5px currentColor; }
-            to { text-shadow: 0 0 20px currentColor; }
+        #dance-game {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
         }
 
-        footer {
-            margin-top: auto;
-            padding: 1.5rem;
-            color: rgba(255,255,255,0.5);
-            font-size: 0.9rem;
-            text-align: center;
-            width: 100%;
-            border-top: 1px solid rgba(255,255,255,0.1);
+        .dance-move {
+            font-size: 2em;
+            margin: 15px 0;
+        }
+
+        #leaderboard {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
         }
 
         @media (max-width: 768px) {
-            .pantalla {
-                padding: 1.5rem;
-                margin: 1rem 0;
-            }
-
             h1 {
-                font-size: 1.5rem !important;
+                font-size: 1.8em;
             }
 
-            #entrada-respuesta {
-                font-size: 1rem;
-                padding: 12px;
-            }
-
-            .boton {
-                width: 100%;
-                margin: 0.5rem 0;
-            }
-
-            .estadisticas {
-                gap: 1rem;
-                font-size: 1rem;
-            }
-
-            footer {
+            .section {
                 padding: 1rem;
-                font-size: 0.8rem;
             }
-        }
 
-        @keyframes pulseCorrecto {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes vibrar {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
+            #score-board, #timer, #lives, #leaderboard {
+                position: static;
+                margin: 10px auto;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="pantalla" id="bienvenida">
-        <h1 style="animation: aparecer 1s ease-out;">🔮 Acertijos Mágicos 🔮</h1>
-        <button class="boton" id="btnJugar" style="animation: aparecer 1s 0.3s both;">¡JUGAR!</button>
-    </div>
-
-    <div class="pantalla" id="juego" style="display: none;">
-        <h1>🔮 Acertijos Mágicos 🔮</h1>
-        
-        <div class="estadisticas">
-            <div>⭐ <span id="puntos">0</span></div>
-            <div>❤️ <span id="vidas">3</span></div>
-            <div>🔥 <span id="combo">0</span>x</div>
+    <div class="container">
+        <!-- Página de bienvenida -->
+        <div class="section active" id="welcome">
+            <h1>🎤 BTS Quiz Challenge 🎧</h1>
+            <button class="btn" onclick="startGame()">¡Comenzar!</button>
+            <div id="leaderboard">
+                <h3>🏆 Clasificación</h3>
+                <div id="leaderboard-list"></div>
+            </div>
         </div>
 
-        <div id="tiempo-restante">
-            <div id="barra-tiempo"></div>
+        <!-- Juego -->
+        <div class="section" id="game">
+            <h2>Adivina el concepto BTS</h2>
+            <div id="riddle-container"></div>
+            <div class="options-container" id="options-container"></div>
+            <button class="btn" onclick="showHint()">Pista (-10 puntos)</button>
         </div>
 
-        <div id="acertijo" style="margin: 1.5rem 0; font-size: 1.1rem;"></div>
-        <div id="pistas" style="color: #888;"></div>
+        <!-- Mini Juego -->
+        <div class="section" id="mini-game">
+            <h2>💃 Coreografía BTS 💃</h2>
+            <div id="dance-game">
+                <p>¡Repite la secuencia de baile!</p>
+                <div class="dance-move" id="dance-sequence"></div>
+                <input type="text" id="dance-input" placeholder="Ingresa la secuencia">
+                <button class="btn" onclick="checkDance()">Verificar</button>
+            </div>
+        </div>
 
-        <input type="text" id="entrada-respuesta" placeholder="Escribe tu respuesta..." autocomplete="off">
-        
-        <div style="margin-top: 1.5rem;">
-            <button class="boton" id="btnComprobar">COMPROBAR</button>
-            <button class="boton" id="btnPista">PISTA (-10⭐)</button>
+        <!-- Victoria -->
+        <div class="section" id="victory">
+            <h1>✨ ¡Perfecto ARMY! ✨</h1>
+            <button class="btn" onclick="showCelebration()">¡Lo lograste!</button>
         </div>
     </div>
 
-    <div class="pantalla" id="pantalla-derrota" style="display: none;">
-        <h1>💀 GAME OVER 💀</h1>
-        <p>Puntuación final: <span id="puntos-finales">0</span> ⭐</p>
-        
-        <h3>🏅 Logros Desbloqueados</h3>
-        <div class="logros-container" id="logros-derrota"></div>
-        
-        <table class="team-table">
-            <thead>
-                <tr><th>Integrante</th><th>Rol</th></tr>
-            </thead>
-            <tbody id="team-body"></tbody>
-        </table>
-
-        <button class="boton" onclick="location.reload()">Reintentar</button>
-        <button class="boton" onclick="window.open('https://youtu.be/QvdqKV3Bhcs')">Castigo</button>
-    </div>
-
-    <div class="pantalla" id="pantalla-victoria" style="display: none;">
-        <h1>🏆 VICTORIA 🏆</h1>
-        <p>Puntuación total: <span id="puntos-victoria">0</span> ⭐</p>
-        
-        <h3>🏅 Logros Desbloqueados</h3>
-        <div class="logros-container" id="logros-victoria"></div>
-        
-        <table class="team-table">
-            <thead>
-                <tr><th>Integrante</th><th>Rol</th></tr>
-            </thead>
-            <tbody id="team-body-victory"></tbody>
-        </table>
-
-        <button class="boton" onclick="location.reload()">Jugar de nuevo</button>
-        <button class="boton" onclick="window.open('https://youtu.be/xvFZjo5PgG0&pp')">Victoria</button>
-    </div>
-
-    <footer>
-        Todos los derechos reservados © Anthony Network<br>
-    </footer>
+    <div id="timer">⏳ 30s</div>
+    <div id="lives">❤️❤️❤️</div>
+    <div id="score-board">Puntos: <span id="score">0</span></div>
+    <div class="powerup" onclick="usePowerUp()">✨<br>Power-Up</div>
 
     <script>
-        let puntos = 0;
-        let vidas = 3;
-        let combo = 0;
-        let tiempoRestante = 70;
-        let intervalo;
-        let acertijoActual = 0;
-        let logrosDesbloqueados = new Set();
-        let contadorCategorias = { naturaleza: 0, objetos: 0, abstracto: 0 };
-
-        const acertijos = [
-            { categoria: 'naturaleza', pregunta: "Blanco por dentro, verde por fuera. Si no lo sabes, espera.", respuesta: "pera", pista: "Es una fruta" },
-            { categoria: 'objetos', pregunta: "Tengo hojas sin ser árbol, hablo sin tener voz. ¿Qué soy?", respuesta: "libro", pista: "Se lee" },
-            { categoria: 'abstracto', pregunta: "Cuanto más quito, más grande me hago.", respuesta: "agujero", pista: "Espacio vacío" },
-            { categoria: 'naturaleza', pregunta: "Oro parece, plata no es. El que no lo adivine, bien tonto es.", respuesta: "platano", pista: "Maduro es dulce" },
-            { categoria: 'objetos', pregunta: "Va subiendo y bajando, pero nunca se mueve.", respuesta: "escalera", pista: "Tiene peldaños" },
-            { categoria: 'abstracto', pregunta: "Lo tienes pero no lo puedes prestar.", respuesta: "sombra", pista: "Sigue tu movimiento" },
-            { categoria: 'naturaleza', pregunta: "Redondo como la luna, lleno de estrellas, aunque es de día.", respuesta: "sandía", pista: "Tiene pepitas negras" },
-            { categoria: 'objetos', pregunta: "Entra duro y sale blando.", respuesta: "pan", pista: "Se hornea" },
-            { categoria: 'abstracto', pregunta: "Se puede ver en el agua, pero nunca se moja.", respuesta: "reflejo", pista: "Es una imagen" },
-            { categoria: 'naturaleza', pregunta: "Blanco fue mi nacimiento, verde me hice al crecer, negro me volví al morir.", respuesta: "carbón", pista: "Usado para fuego" }
-        ];
-
-        const logros = [
-            { id: 'naturaleza-3', nombre: '🌿 Maestro Naturaleza', descripcion: '3 acertijos de naturaleza', icono: '🌿', condicion: () => contadorCategorias.naturaleza >= 3 },
-            { id: 'objetos-3', nombre: '📦 Rey Objetos', descripcion: '3 acertijos de objetos', icono: '📦', condicion: () => contadorCategorias.objetos >= 3 },
-            { id: 'abstracto-3', nombre: '🌀 Pensador Abstracto', descripcion: '3 acertijos abstractos', icono: '🌀', condicion: () => contadorCategorias.abstracto >= 3 },
-            { id: 'combo-5', nombre: '🔥 Racha de Fuego', descripcion: 'Combo de 5 respuestas', icono: '🔥', condicion: () => combo >= 5 }
-        ];
-
-        const teamMembers = [
-            { name: 'Naomi', role: 'furra reina 👑', class: 'furra-reina' },
-            { name: 'Humbertoplayer', role: 'furro esclavo payaso 🤡' },
-            { name: '@cazb2105', role: 'furro esclavo 🔗' },
-            { name: 'Sebas', role: 'furro esclavo 🛠️' },
-            { name: '@kuszack19', role: 'furro aprendiz 🧠' },
-            { name: '@srpanda2006', role: 'furro jamonero 🐷' },
-            { name: '@k_m_06', role: 'furro 🐾' },
-            { name: 'Maelyn', role: 'no furra ❌' },
-            { name: 'Anthony', role: 'rey 👑 Anti furros', class: 'anti-furro' }
-        ];
-
-        function comenzarJuego() {
-            document.getElementById('bienvenida').style.display = 'none';
-            document.getElementById('juego').style.display = 'block';
-            iniciarTemporizador();
-            mostrarAcertijo();
-        }
-
-        function mostrarAcertijo() {
-            document.getElementById('acertijo').textContent = acertijos[acertijoActual].pregunta;
-            document.getElementById('entrada-respuesta').value = '';
-            document.getElementById('pistas').textContent = '';
-            document.getElementById('barra-tiempo').style.width = '100%';
-             tiempoRestante = 70;
-        }
-
-        function iniciarTemporizador() {
-            clearInterval(intervalo);
-            intervalo = setInterval(() => {
-                tiempoRestante -= 0.1;
-                document.getElementById('barra-tiempo').style.width = (tiempoRestante / 70 * 100) + '%';
-                if(tiempoRestante <= 0) perderVida();
-            }, 100);
-        }
-
-        function verificarRespuesta() {
-            const respuesta = document.getElementById('entrada-respuesta').value.toLowerCase().trim();
-            const categoria = acertijos[acertijoActual].categoria;
-            
-            if (respuesta === acertijos[acertijoActual].respuesta) {
-                combo++;
-                puntos += Math.floor(tiempoRestante * (acertijoActual + 1) + (combo * 15));
-                contadorCategorias[categoria]++;
-                verificarLogros();
-                
-                if(acertijoActual === acertijos.length - 1) {
-                    victoriaJuego();
-                    return;
-                }
-                
-                acertijoActual++;
-                mostrarAcertijo();
-                iniciarTemporizador();
-                animarCorrecto();
-            } else {
-                combo = 0;
-                perderVida();
-                animarError();
+        let currentRiddle = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timer;
+        let lives = 3;
+        const riddles = [
+            {
+                question: "¿Cómo se llama la isla ficticia creada para el universo de BTS?",
+                answer: "epthemere",
+                hint: "Comienza con 'E' y está relacionado con su serie de videos",
+                options: ["Butter Island", "Epthemere", "Bangtan City", "Maple Street"]
+            },
+            {
+                question: "¿Qué canción tiene el verso 'Soy el que te salvé, soy el que te borré'?",
+                answer: "black swan",
+                hint: "Una canción sobre el dolor de perder la pasión por el arte",
+                options: ["Fake Love", "Black Swan", "Blood Sweat & Tears", "Dynamite"]
+            },
+            {
+                question: "¿Cuál es el lema oficial de BTS?",
+                answer: "army",
+                hint: "También es el nombre de su fandom",
+                options: ["Borahaesae", "ARMY", "Bangtan", "Purple Heart"]
+            },
+            {
+                question: "¿Qué álbum incluye la canción 'Spring Day'?",
+                answer: "you never walk alone",
+                hint: "Es una reedición de 'Wings'",
+                options: ["Love Yourself: Her", "You Never Walk Alone", "Map of the Soul: 7", "BE"]
+            },
+            {
+                question: "¿Qué miembro tiene el apodo 'Demonio de la Cocina'?",
+                answer: "jin",
+                hint: "Es el miembro más antiguo",
+                options: ["J-Hope", "Jin", "RM", "Suga"]
+            },
+            {
+                question: "¿Qué número representa a los ARMY en el universo BTS?",
+                answer: "7",
+                hint: "Es el mismo número de miembros",
+                options: ["5", "7", "13", "21"]
+            },
+            {
+                question: "¿Qué canción hizo famoso el 'Idol Dance'?",
+                answer: "idol",
+                hint: "Incluye una colaboración con Nicki Minaj",
+                options: ["DNA", "Boy With Luv", "Idol", "Dope"]
+            },
+            {
+                question: "¿Qué premio importante ganó BTS en 2020?",
+                answer: "vma",
+                hint: "Fue su primer premio en esta ceremonia",
+                options: ["Grammy", "VMA", "Billboard", "AMA"]
+            },
+            {
+                question: "¿Qué miembro dijo 'So show me, I'll show you'?",
+                answer: "v",
+                hint: "De la canción Singularity",
+                options: ["Jungkook", "Jimin", "V", "RM"]
+            },
+            {
+                question: "¿Qué álbum tiene una versión llamada 'Clarity'?",
+                answer: "map of the soul: persona",
+                hint: "Incluye la canción 'Mikrokosmos'",
+                options: ["Map of the Soul: 7", "Love Yourself: Tear", "Map of the Soul: Persona", "BE"]
+            },
+            {
+                question: "¿Qué baile icónico pertenece a 'Blood Sweat & Tears'?",
+                answer: "caída hacia atrás",
+                hint: "Movimiento dramático durante el coro",
+                options: ["Onda de la mano", "Caída hacia atrás", "Salto en V", "Giro de 360"]
+            },
+            {
+                question: "¿Qué concepto tuvo BTS en 'Fake Love'?",
+                answer: "emo rock",
+                hint: "Estilo oscuro y dramático",
+                options: ["Hip Hop", "Emo Rock", "Jazz", "Electro Pop"]
+            },
+            {
+                question: "¿Qué miembro lanzó 'Agust D' como solista?",
+                answer: "suga",
+                hint: "Su nombre real es Min Yoongi",
+                options: ["Suga", "RM", "J-Hope", "Jin"]
+            },
+            {
+                question: "¿Qué canción tiene la coreografía 'Tearing the Poster'?",
+                answer: "dope",
+                hint: "Canción sobre trabajar duro",
+                options: ["Fire", "Dope", "Not Today", "Save Me"]
+            },
+            {
+                question: "¿Qué significa BTS en coreano?",
+                answer: "bangtan sonyeondan",
+                hint: "Traducido como 'Bulletproof Boy Scouts'",
+                options: ["Bangtan Sonyeondan", "Best Talent Show", "Born To Sing", "Bangtan Stars"]
             }
-            actualizarUI();
+        ];
+
+        function startGame() {
+            currentRiddle = 0;
+            score = 0;
+            lives = 3;
+            timeLeft = 30;
+            document.getElementById('welcome').classList.remove('active');
+            document.getElementById('game').classList.add('active');
+            document.getElementById('lives').innerHTML = '❤️'.repeat(lives);
+            updateScore();
+            showRiddle();
+            startTimer();
         }
 
-        function animarCorrecto() {
-            const acertijo = document.getElementById('acertijo');
-            acertijo.style.animation = 'pulseCorrecto 0.5s';
-            setTimeout(() => acertijo.style.animation = '', 500);
-        }
-
-        function animarError() {
-            const entrada = document.getElementById('entrada-respuesta');
-            entrada.style.animation = 'vibrar 0.3s';
-            setTimeout(() => entrada.style.animation = '', 300);
-        }
-
-        function verificarLogros() {
-            logros.forEach(logro => {
-                if(!logrosDesbloqueados.has(logro.id) && logro.condicion()) {
-                    logrosDesbloqueados.add(logro.id);
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = `⏳ ${timeLeft}s`;
+                if(timeLeft <= 0) {
+                    loseLife();
+                    nextQuestion();
                 }
+            }, 1000);
+        }
+
+        function showRiddle() {
+            const riddle = riddles[currentRiddle];
+            document.getElementById('riddle-container').textContent = riddle.question;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            riddle.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.onclick = (e) => checkAnswer(e.target.textContent.toLowerCase());
+                optionsContainer.appendChild(button);
             });
         }
 
-        function perderVida() {
-            vidas--;
-            vidas <= 0 ? finDelJuego() : (mostrarAcertijo(), iniciarTemporizador());
+        function checkAnswer(userAnswer) {
+            const correctAnswer = riddles[currentRiddle].answer;
+            
+            if(userAnswer === correctAnswer) {
+                score += 20;
+                showFeedback('¡Correcto! +20', 'green');
+                nextQuestion();
+            } else {
+                showFeedback('❌ Incorrecto! -5', 'red');
+                score = Math.max(0, score -5);
+                loseLife();
+            }
+            updateScore();
         }
 
-        function usarPista() {
-            if(puntos >= 10) {
-                puntos -= 10;
-                document.getElementById('pistas').textContent = acertijos[acertijoActual].pista;
-                actualizarUI();
+        function nextQuestion() {
+            currentRiddle++;
+            if(currentRiddle >= riddles.length) {
+                endGame();
+            } else {
+                timeLeft = 30;
+                startTimer();
+                showRiddle();
             }
         }
 
-        function actualizarUI() {
-            document.getElementById('puntos').textContent = puntos;
-            document.getElementById('vidas').textContent = vidas;
-            document.getElementById('combo').textContent = combo;
+        function loseLife() {
+            lives--;
+            document.getElementById('lives').innerHTML = '❤️'.repeat(lives);
+            if(lives <= 0) {
+                alert('¡Game Over!');
+                startGame();
+            }
         }
 
-        function finDelJuego() {
-            clearInterval(intervalo);
-            document.getElementById('juego').style.display = 'none';
-            document.getElementById('pantalla-derrota').style.display = 'block';
-            document.getElementById('puntos-finales').textContent = puntos;
-            poblarTabla('team-body');
-            mostrarLogros('logros-derrota');
+        function usePowerUp() {
+            if(score >= 50) {
+                score -= 50;
+                timeLeft += 15;
+                alert('+15 segundos!');
+                updateScore();
+            }
         }
 
-        function victoriaJuego() {
-            clearInterval(intervalo);
-            document.getElementById('juego').style.display = 'none';
-            document.getElementById('pantalla-victoria').style.display = 'block';
-            document.getElementById('puntos-victoria').textContent = puntos;
-            poblarTabla('team-body-victory');
-            mostrarLogros('logros-victoria');
+        function showHint() {
+            if(score >= 10) {
+                score -= 10;
+                alert(riddles[currentRiddle].hint);
+                updateScore();
+            }
         }
 
-        function poblarTabla(idTabla) {
-            document.getElementById(idTabla).innerHTML = teamMembers.map(m => `
-                <tr><td class="${m.class || ''}">${m.name}</td><td class="${m.class || ''}">${m.role}</td></tr>
-            `).join('');
+        function updateScore() {
+            document.getElementById('score').textContent = score;
         }
 
-        function mostrarLogros(contenedorId) {
-            document.getElementById(contenedorId).innerHTML = logros.map(l => `
-                <div class="logro ${logrosDesbloqueados.has(l.id) ? '' : 'bloqueado'}">
-                    <div class="logro-icon">${l.icono}</div>
-                    <h4>${l.nombre}</h4>
-                    <p>${l.descripcion}</p>
-                    <small>${logrosDesbloqueados.has(l.id) ? 'Desbloqueado!' : 'Bloqueado'}</small>
-                </div>
-            `).join('');
+        function endGame() {
+            clearInterval(timer);
+            document.getElementById('game').classList.remove('active');
+            document.getElementById('victory').classList.add('active');
+            updateLeaderboard();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('btnJugar').addEventListener('click', comenzarJuego);
-            document.getElementById('btnComprobar').addEventListener('click', verificarRespuesta);
-            document.getElementById('btnPista').addEventListener('click', usarPista);
-            document.getElementById('entrada-respuesta').addEventListener('keypress', e => e.key === 'Enter' && verificarRespuesta());
+        function showCelebration() {
+            window.open('https://www.youtube.com/watch?v=ygUIanVuZ2tvb2s%3D?autoplay=1', '_blank');
+            document.body.style.background = 'linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045)';
+        }
+
+        function showFeedback(text, color) {
+            const feedback = document.createElement('div');
+            feedback.style = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                font-size: 2em; color: ${color}; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);`;
+            feedback.textContent = text;
+            document.body.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 1000);
+        }
+
+        function updateLeaderboard() {
+            let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+            leaderboard.push({ name: 'Jugador', score: score });
+            leaderboard.sort((a, b) => b.score - a.score);
+            leaderboard = leaderboard.slice(0, 5);
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+            
+            document.getElementById('leaderboard-list').innerHTML = leaderboard
+                .map((entry, index) => `${index + 1}. ${entry.name}: ${entry.score}`)
+                .join('<br>');
+        }
+
+        // Easter egg
+        document.addEventListener('keypress', (e) => {
+            if(e.key === '7') {
+                document.body.style.background = 'linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045)';
+                setTimeout(() => {
+                    document.body.style.background = 'linear-gradient(45deg, #ffdead, #f5f5dc)';
+                }, 3000);
+            }
         });
+
+        // Inicializar leaderboard
+        updateLeaderboard();
     </script>
 </body>
 </html>
