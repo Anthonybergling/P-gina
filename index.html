@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BTS Quiz Challenge</title>
+    <title>Jungkook es furro igual que naomi</title>
     <style>
         :root {
             --purple: #8A2BE2;
             --pink: #FF69B4;
-            --main-font: 'Arial', sans-serif;
+            --main-font: 'Poppins', Arial, sans-serif;
         }
 
         * {
@@ -19,308 +19,394 @@
 
         body {
             font-family: var(--main-font);
-            background: linear-gradient(45deg, #ffdead, #f5f5dc);
+            background: linear-gradient(45deg, #fff5e6, #ffe4b3);
             min-height: 100vh;
             padding: 20px;
-            transition: background 0.5s;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .decorative {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .decorative-circle {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(138,43,226,0.1) 0%, rgba(255,255,255,0) 70%);
+            position: absolute;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
             position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .bts-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--purple), var(--pink));
+            mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>') no-repeat center;
+            margin: 0 auto 1rem;
         }
 
         .section {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.98);
+            padding: 2.5rem;
+            border-radius: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             display: none;
             text-align: center;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .active {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
 
         h1 {
             color: var(--purple);
-            margin-bottom: 1rem;
-            font-size: 2.5em;
+            margin-bottom: 1.5rem;
+            font-size: 2.8em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--purple), var(--pink));
         }
 
         .btn {
             background: linear-gradient(45deg, var(--purple), var(--pink));
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+            padding: 18px 35px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: transform 0.3s;
-            margin: 10px;
-            max-width: 300px;
+            transition: all 0.3s;
+            margin: 15px;
+            width: 100%;
+            max-width: 320px;
             font-size: 1.1em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
         }
 
         .btn:hover {
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
         }
 
-        #riddle-container {
-            font-size: 1.2em;
-            margin: 20px 0;
-            min-height: 100px;
-            font-weight: bold;
-        }
-
-        #score-board {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            font-weight: bold;
+        #question-container {
+            font-size: 1.3em;
+            margin: 25px 0;
+            min-height: 120px;
+            font-weight: 600;
+            padding: 20px;
+            line-height: 1.5;
+            color: #333;
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .options-container {
             display: grid;
-            gap: 10px;
-            margin: 20px 0;
+            gap: 15px;
+            margin: 25px 0;
         }
 
         .option-btn {
-            background: rgba(139, 0, 139, 0.1);
+            background: rgba(255, 255, 255, 0.95);
             color: var(--purple);
-            border: 2px solid var(--purple);
-            padding: 10px;
+            border: 2px solid rgba(138, 43, 226, 0.2);
+            padding: 18px;
             border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 1em;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .option-btn:hover {
-            background: var(--purple);
+            background: linear-gradient(45deg, var(--purple), var(--pink));
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
         }
 
         #timer {
             position: fixed;
             top: 20px;
             left: 20px;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         #lives {
             position: fixed;
             top: 70px;
             left: 20px;
-            font-size: 1.5em;
+            font-size: 1.6em;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .powerup {
+        #score-board {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: gold;
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-
-        #dance-game {
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-        }
-
-        .dance-move {
-            font-size: 2em;
-            margin: 15px 0;
-        }
-
-        #leaderboard {
-            position: fixed;
-            bottom: 20px;
+            top: 20px;
             right: 20px;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            max-height: 200px;
-            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8em;
+            body {
+                padding: 15px;
             }
 
             .section {
-                padding: 1rem;
+                padding: 1.5rem;
             }
 
-            #score-board, #timer, #lives, #leaderboard {
+            h1 {
+                font-size: 2em;
+            }
+
+            #timer, #lives, #score-board {
                 position: static;
                 margin: 10px auto;
+                display: inline-block;
+            }
+
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: 15px 25px;
+                font-size: 1em;
             }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="decorative">
+        <div class="decorative-circle" style="top: -50px; left: -50px;"></div>
+        <div class="decorative-circle" style="bottom: -100px; right: -50px;"></div>
+    </div>
+
     <div class="container">
-        <!-- Página de bienvenida -->
+        <div class="header">
+            <div class="bts-logo"></div>
+            <h1>Jungkook es furro igual que naomi😺</h1>
+        </div>
+
         <div class="section active" id="welcome">
-            <h1>🎤 BTS Quiz Challenge 🎧</h1>
-            <button class="btn" onclick="startGame()">¡Comenzar!</button>
-            <div id="leaderboard">
-                <h3>🏆 Clasificación</h3>
-                <div id="leaderboard-list"></div>
-            </div>
+            <button class="btn" onclick="startGame()">¡Comenzar el desafío!</button>
         </div>
 
-        <!-- Juego -->
         <div class="section" id="game">
-            <h2>Adivina el concepto BTS</h2>
-            <div id="riddle-container"></div>
+            <div id="question-container"></div>
             <div class="options-container" id="options-container"></div>
-            <button class="btn" onclick="showHint()">Pista (-10 puntos)</button>
         </div>
 
-        <!-- Mini Juego -->
-        <div class="section" id="mini-game">
-            <h2>💃 Coreografía BTS 💃</h2>
-            <div id="dance-game">
-                <p>¡Repite la secuencia de baile!</p>
-                <div class="dance-move" id="dance-sequence"></div>
-                <input type="text" id="dance-input" placeholder="Ingresa la secuencia">
-                <button class="btn" onclick="checkDance()">Verificar</button>
-            </div>
-        </div>
-
-        <!-- Victoria -->
         <div class="section" id="victory">
-            <h1>✨ ¡Perfecto ARMY! ✨</h1>
-            <button class="btn" onclick="showCelebration()">¡Lo lograste!</button>
+            <h1>🎉 ¡Felicidades ARMY! 🎉</h1>
+            <p id="final-score"></p>
+            <button class="btn" onclick="startGame()">Jugar de nuevo</button>
         </div>
     </div>
 
     <div id="timer">⏳ 30s</div>
     <div id="lives">❤️❤️❤️</div>
-    <div id="score-board">Puntos: <span id="score">0</span></div>
-    <div class="powerup" onclick="usePowerUp()">✨<br>Power-Up</div>
+    <div id="score-board">⭐ <span id="score">0</span></div>
 
     <script>
-        let currentRiddle = 0;
+        let currentQuestion = 0;
         let score = 0;
         let timeLeft = 30;
         let timer;
         let lives = 3;
-        const riddles = [
+        const questions = [
             {
-                question: "¿Cómo se llama la isla ficticia creada para el universo de BTS?",
-                answer: "epthemere",
-                hint: "Comienza con 'E' y está relacionado con su serie de videos",
-                options: ["Butter Island", "Epthemere", "Bangtan City", "Maple Street"]
+                question: "¿Qué miembro tiene tatuada la frase 'Young Forever'?",
+                answer: "jungkook",
+                options: ["Jin", "Suga", "Jungkook", "V"]
             },
             {
-                question: "¿Qué canción tiene el verso 'Soy el que te salvé, soy el que te borré'?",
-                answer: "black swan",
-                hint: "Una canción sobre el dolor de perder la pasión por el arte",
-                options: ["Fake Love", "Black Swan", "Blood Sweat & Tears", "Dynamite"]
+                question: "¿Qué canción de BTS superó los 2 billones de streams en Spotify?",
+                answer: "dynamite",
+                options: ["Boy With Luv", "DNA", "Dynamite", "Butter"]
             },
             {
-                question: "¿Cuál es el lema oficial de BTS?",
-                answer: "army",
-                hint: "También es el nombre de su fandom",
-                options: ["Borahaesae", "ARMY", "Bangtan", "Purple Heart"]
+                question: "¿Qué álbum contiene la canción 'Pied Piper'?",
+                answer: "love yourself: her",
+                options: ["Wings", "Love Yourself: Her", "BE", "Map of the Soul: 7"]
             },
             {
-                question: "¿Qué álbum incluye la canción 'Spring Day'?",
-                answer: "you never walk alone",
-                hint: "Es una reedición de 'Wings'",
-                options: ["Love Yourself: Her", "You Never Walk Alone", "Map of the Soul: 7", "BE"]
+                question: "¿Qué miembro diseñó el logo oficial de BTS?",
+                answer: "rm",
+                options: ["RM", "J-Hope", "Jimin", "Suga"]
             },
             {
-                question: "¿Qué miembro tiene el apodo 'Demonio de la Cocina'?",
-                answer: "jin",
-                hint: "Es el miembro más antiguo",
-                options: ["J-Hope", "Jin", "RM", "Suga"]
+                question: "¿En qué año lanzaron su primer álbum japonés 'Wake Up'?",
+                answer: "2014",
+                options: ["2013", "2014", "2015", "2016"]
             },
             {
-                question: "¿Qué número representa a los ARMY en el universo BTS?",
-                answer: "7",
-                hint: "Es el mismo número de miembros",
-                options: ["5", "7", "13", "21"]
+                question: "¿Qué canción tiene la coreografía del 'Telefono'?",
+                answer: "telepathy",
+                options: ["Telepathy", "Dis-ease", "Stay", "Fly To My Room"]
             },
             {
-                question: "¿Qué canción hizo famoso el 'Idol Dance'?",
-                answer: "idol",
-                hint: "Incluye una colaboración con Nicki Minaj",
-                options: ["DNA", "Boy With Luv", "Idol", "Dope"]
-            },
-            {
-                question: "¿Qué premio importante ganó BTS en 2020?",
-                answer: "vma",
-                hint: "Fue su primer premio en esta ceremonia",
-                options: ["Grammy", "VMA", "Billboard", "AMA"]
-            },
-            {
-                question: "¿Qué miembro dijo 'So show me, I'll show you'?",
-                answer: "v",
-                hint: "De la canción Singularity",
-                options: ["Jungkook", "Jimin", "V", "RM"]
-            },
-            {
-                question: "¿Qué álbum tiene una versión llamada 'Clarity'?",
-                answer: "map of the soul: persona",
-                hint: "Incluye la canción 'Mikrokosmos'",
-                options: ["Map of the Soul: 7", "Love Yourself: Tear", "Map of the Soul: Persona", "BE"]
-            },
-            {
-                question: "¿Qué baile icónico pertenece a 'Blood Sweat & Tears'?",
-                answer: "caída hacia atrás",
-                hint: "Movimiento dramático durante el coro",
-                options: ["Onda de la mano", "Caída hacia atrás", "Salto en V", "Giro de 360"]
-            },
-            {
-                question: "¿Qué concepto tuvo BTS en 'Fake Love'?",
-                answer: "emo rock",
-                hint: "Estilo oscuro y dramático",
-                options: ["Hip Hop", "Emo Rock", "Jazz", "Electro Pop"]
-            },
-            {
-                question: "¿Qué miembro lanzó 'Agust D' como solista?",
+                question: "¿Qué miembro tiene un perro llamado Holly?",
                 answer: "suga",
-                hint: "Su nombre real es Min Yoongi",
-                options: ["Suga", "RM", "J-Hope", "Jin"]
+                options: ["Jin", "Suga", "V", "Jungkook"]
             },
             {
-                question: "¿Qué canción tiene la coreografía 'Tearing the Poster'?",
-                answer: "dope",
-                hint: "Canción sobre trabajar duro",
-                options: ["Fire", "Dope", "Not Today", "Save Me"]
+                question: "¿Qué premio histórico ganaron en los AMA 2021?",
+                answer: "artista del año",
+                options: ["Mejor Grupo", "Artista del Año", "Canción del Verano", "Mejor Coreografía"]
             },
             {
-                question: "¿Qué significa BTS en coreano?",
-                answer: "bangtan sonyeondan",
-                hint: "Traducido como 'Bulletproof Boy Scouts'",
-                options: ["Bangtan Sonyeondan", "Best Talent Show", "Born To Sing", "Bangtan Stars"]
+                question: "¿Qué serie de Netflix muestra su gira 'Love Yourself'?",
+                answer: "break the silence",
+                options: ["Burn the Stage", "Break the Silence", "Bring the Soul", "Run BTS"]
+            },
+            {
+                question: "¿Qué miembro lanzó la canción 'Abyss'?",
+                answer: "jin",
+                options: ["Jin", "RM", "V", "Jimin"]
+            },
+            {
+                question: "¿Qué canción contiene el verso 'I'm the one I should love in this world'?",
+                answer: "epiphany",
+                options: ["Epiphany", "Serendipity", "Euphoria", "Filter"]
+            },
+            {
+                question: "¿Qué álbum incluye la canción 'Dis-ease'?",
+                answer: "be",
+                options: ["BE", "Map of the Soul: 7", "Love Yourself: Tear", "Wings"]
+            },
+            {
+                question: "¿Qué miembro es conocido como 'Guardián de la Sonrisa'?",
+                answer: "j-hope",
+                options: ["J-Hope", "Jin", "Jimin", "V"]
+            },
+            {
+                question: "¿Qué canción tiene el récord de más vistas en 24 horas en YouTube?",
+                answer: "butter",
+                options: ["Dynamite", "Boy With Luv", "Butter", "Permission to Dance"]
+            },
+            {
+                question: "¿Qué miembro escribió 'The Last' en su mixtape?",
+                answer: "suga",
+                options: ["RM", "Suga", "J-Hope", "Jungkook"]
+            },
+            {
+                question: "¿Qué canción de BTS aparece en la banda sonora de 'Black Panther'?",
+                answer: "black swan",
+                options: ["Black Swan", "Mic Drop", "Not Today", "Idol"]
+            },
+            {
+                question: "¿Qué miembro tiene un canal de YouTube llamado 'Gukstagram'?",
+                answer: "jungkook",
+                options: ["V", "Jungkook", "Jimin", "RM"]
+            },
+            {
+                question: "¿Qué álbum contiene la canción '134340'?",
+                answer: "love yourself: tear",
+                options: ["Love Yourself: Her", "Love Yourself: Tear", "Wings", "Map of the Soul: 7"]
+            },
+            {
+                question: "¿Qué miembro interpretó a Hansung en el drama 'Hwarang'?",
+                answer: "v",
+                options: ["Jin", "V", "Jungkook", "Suga"]
+            },
+            {
+                question: "¿Qué canción tiene el verso 'Siempre seré tu fan'?",
+                answer: "2! 3!",
+                options: ["2! 3!", "Magic Shop", "Mikrokosmos", "We Are Bulletproof: The Eternal"]
+            },
+            {
+                question: "¿Qué miembro tiene una hermana llamada Jeong Jiwoo?",
+                answer: "jimin",
+                options: ["Jimin", "Jin", "Jungkook", "RM"]
+            },
+            {
+                question: "¿Qué canción contiene el sample de 'I Need a Girl' de Taeyang?",
+                answer: "boy in luv",
+                options: ["Boy In Luv", "Danger", "War of Hormone", "No More Dream"]
+            },
+            {
+                question: "¿Qué miembro habla japonés con fluidez?",
+                answer: "jin",
+                options: ["Jin", "RM", "Suga", "J-Hope"]
+            },
+            {
+                question: "¿Qué canción fue compuesta originalmente para TWICE?",
+                answer: "permission to dance",
+                options: ["Butter", "Permission to Dance", "Dynamite", "Boy With Luv"]
+            },
+            {
+                question: "¿Qué miembro tiene un tatuaje de 'ARMY' en la mano?",
+                answer: "jimin",
+                options: ["Jimin", "V", "Jungkook", "RM"]
+            },
+            {
+                question: "¿Qué canción contiene la letra 'You gave me the best of me'?",
+                answer: "the truth untold",
+                options: ["The Truth Untold", "Spring Day", "Fake Love", "Blood Sweat & Tears"]
             }
         ];
 
         function startGame() {
-            currentRiddle = 0;
+            currentQuestion = 0;
             score = 0;
             lives = 3;
             timeLeft = 30;
@@ -328,7 +414,7 @@
             document.getElementById('game').classList.add('active');
             document.getElementById('lives').innerHTML = '❤️'.repeat(lives);
             updateScore();
-            showRiddle();
+            showQuestion();
             startTimer();
         }
 
@@ -337,38 +423,35 @@
             timer = setInterval(() => {
                 timeLeft--;
                 document.getElementById('timer').textContent = `⏳ ${timeLeft}s`;
-                if(timeLeft <= 0) {
-                    loseLife();
-                    nextQuestion();
-                }
+                if(timeLeft <= 0) loseLife();
             }, 1000);
         }
 
-        function showRiddle() {
-            const riddle = riddles[currentRiddle];
-            document.getElementById('riddle-container').textContent = riddle.question;
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('question-container').textContent = question.question;
             
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
             
-            riddle.options.forEach(option => {
+            question.options.forEach(option => {
                 const button = document.createElement('button');
                 button.className = 'option-btn';
                 button.textContent = option;
-                button.onclick = (e) => checkAnswer(e.target.textContent.toLowerCase());
+                button.onclick = () => checkAnswer(option.toLowerCase());
                 optionsContainer.appendChild(button);
             });
         }
 
         function checkAnswer(userAnswer) {
-            const correctAnswer = riddles[currentRiddle].answer;
+            const correctAnswer = questions[currentQuestion].answer;
             
             if(userAnswer === correctAnswer) {
                 score += 20;
-                showFeedback('¡Correcto! +20', 'green');
+                showFeedback('¡Correcto! +20', '#2ecc71');
                 nextQuestion();
             } else {
-                showFeedback('❌ Incorrecto! -5', 'red');
+                showFeedback('❌ Incorrecto! -5', '#e74c3c');
                 score = Math.max(0, score -5);
                 loseLife();
             }
@@ -376,13 +459,13 @@
         }
 
         function nextQuestion() {
-            currentRiddle++;
-            if(currentRiddle >= riddles.length) {
+            currentQuestion++;
+            if(currentQuestion >= questions.length) {
                 endGame();
             } else {
                 timeLeft = 30;
                 startTimer();
-                showRiddle();
+                showQuestion();
             }
         }
 
@@ -395,23 +478,6 @@
             }
         }
 
-        function usePowerUp() {
-            if(score >= 50) {
-                score -= 50;
-                timeLeft += 15;
-                alert('+15 segundos!');
-                updateScore();
-            }
-        }
-
-        function showHint() {
-            if(score >= 10) {
-                score -= 10;
-                alert(riddles[currentRiddle].hint);
-                updateScore();
-            }
-        }
-
         function updateScore() {
             document.getElementById('score').textContent = score;
         }
@@ -420,12 +486,7 @@
             clearInterval(timer);
             document.getElementById('game').classList.remove('active');
             document.getElementById('victory').classList.add('active');
-            updateLeaderboard();
-        }
-
-        function showCelebration() {
-            window.open('https://www.youtube.com/watch?v=ygUIanVuZ2tvb2s%3D?autoplay=1', '_blank');
-            document.body.style.background = 'linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045)';
+            document.getElementById('final-score').textContent = `Puntuación final: ${score} puntos`;
         }
 
         function showFeedback(text, color) {
@@ -437,18 +498,6 @@
             setTimeout(() => feedback.remove(), 1000);
         }
 
-        function updateLeaderboard() {
-            let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-            leaderboard.push({ name: 'Jugador', score: score });
-            leaderboard.sort((a, b) => b.score - a.score);
-            leaderboard = leaderboard.slice(0, 5);
-            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-            
-            document.getElementById('leaderboard-list').innerHTML = leaderboard
-                .map((entry, index) => `${index + 1}. ${entry.name}: ${entry.score}`)
-                .join('<br>');
-        }
-
         // Easter egg
         document.addEventListener('keypress', (e) => {
             if(e.key === '7') {
@@ -458,9 +507,6 @@
                 }, 3000);
             }
         });
-
-        // Inicializar leaderboard
-        updateLeaderboard();
     </script>
 </body>
 </html>
