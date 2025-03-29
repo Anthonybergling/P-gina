@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Bot Manager</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary: #7289DA;
-            --secondary: #2C2F33;
-            --background: #23272A;
-            --accent: #43B581;
+            --primary: #ff6f61;
+            --secondary: #2a2e33;
+            --background: #1e1e2f;
+            --accent: #61dafb;
+            --gradient: linear-gradient(135deg, #ff6f61, #ff9a8b, #ff6f61);
         }
 
         * {
@@ -21,10 +22,11 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: var(--background);
             color: white;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
@@ -34,9 +36,28 @@
         }
 
         header {
-            background: var(--secondary);
+            background: var(--gradient);
             padding: 2rem 0;
-            border-bottom: 4px solid var(--primary);
+            border-bottom: 4px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(-45deg);
+            animation: moveGradient 10s linear infinite;
+        }
+
+        @keyframes moveGradient {
+            0% { transform: rotate(-45deg) translateX(-100%); }
+            100% { transform: rotate(-45deg) translateX(100%); }
         }
 
         .hero {
@@ -45,11 +66,14 @@
             align-items: center;
             gap: 2rem;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
 
         .hero-content h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
         .hero-content p {
@@ -59,18 +83,20 @@
         }
 
         .invite-btn {
-            background: var(--primary);
+            background: var(--accent);
             color: white;
             padding: 15px 40px;
-            border-radius: 5px;
+            border-radius: 20px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         .invite-btn:hover {
-            background: #5b6ee1;
-            transform: translateY(-2px);
+            background: #4ecdc4;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
         }
 
         .features {
@@ -83,21 +109,50 @@
         .feature-card {
             background: var(--secondary);
             padding: 2rem;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
         }
 
         .feature-card i {
-            font-size: 2rem;
-            color: var(--primary);
+            font-size: 2.5rem;
+            color: var(--accent);
             margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover i {
+            transform: scale(1.2);
         }
 
         .commands-section {
             background: var(--secondary);
             padding: 2rem;
-            border-radius: 10px;
+            border-radius: 15px;
             margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .commands-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 111, 97, 0.1);
+            transform: rotate(45deg);
+            animation: spin 15s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .command {
@@ -107,12 +162,14 @@
             margin: 1rem 0;
             padding: 1rem;
             background: #2a2e33;
-            border-radius: 5px;
+            border-radius: 10px;
+            position: relative;
+            z-index: 1;
         }
 
         .command-code {
             background: #40444b;
-            color: var(--primary);
+            color: var(--accent);
             padding: 0.5rem 1rem;
             border-radius: 5px;
             font-family: 'Courier New', Courier, monospace;
@@ -124,11 +181,21 @@
             color: #72767d;
         }
 
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #4ecdc4;
+        }
+
         @media (max-width: 768px) {
             .hero {
                 text-align: center;
             }
-            
+
             .hero-content h1 {
                 font-size: 2rem;
             }
@@ -144,7 +211,7 @@
                     <p>Automatiza y gestiona tu servidor de Discord de forma profesional</p>
                     <a href="https://discord.com/oauth2/authorize?client_id=1355430712748281926&permissions=1759218604441591&integration_type=0&scope=bot" class="invite-btn">Invitar al Bot</a>
                 </div>
-                <img src="https://cdn.discordapp.com/attachments/1097219208130969620/1120137543325044806/unknown.png" alt="Bot Preview" class="hero-image" style="max-width: 400px; border-radius: 10px;">
+                <img src="https://cdn.discordapp.com/attachments/1097219208130969620/1120137543325044806/unknown.png" alt="Bot Preview" class="hero-image" style="max-width: 400px; border-radius: 15px;">
             </div>
         </div>
     </header>
@@ -189,7 +256,7 @@
 
     <footer>
         <div class="container">
-            <p>© 2024 Discord Bot Manager | <a href="#" style="color: var(--primary);">Política de Privacidad</a></p>
+            <p>© 2024 Discord Bot Manager | <a href="#">Política de Privacidad</a></p>
         </div>
     </footer>
 </body>
