@@ -1,15 +1,196 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Mi Bot de Discord</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7289DA;
+            --secondary: #2C2F33;
+            --background: #23272A;
+            --accent: #43B581;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--background);
+            color: white;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--secondary);
+            padding: 2rem 0;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #b9bbbe;
+            margin-bottom: 2rem;
+        }
+
+        .invite-btn {
+            background: var(--primary);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .invite-btn:hover {
+            background: #5b6ee1;
+            transform: translateY(-2px);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature-card {
+            background: var(--secondary);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .commands-section {
+            background: var(--secondary);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .command {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #2a2e33;
+            border-radius: 5px;
+        }
+
+        .command-code {
+            background: #40444b;
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #72767d;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                text-align: center;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Añade mi Bot a tu Servidor</h1>
-  <a href="ENLACE_DE_INVITACION">Invita al Bot</a>
-  <p>Comandos de configuración:</p>
-  <ul>
-    <li><code>!setstaff @rol</code>: Configura el rol de staff.</li>
-    <li><code>!setcategory #categoría</code>: Configura la categoría de tickets.</li>
-  </ul>
+    <header>
+        <div class="container">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Discord Bot Manager</h1>
+                    <p>Automatiza y gestiona tu servidor de Discord de forma profesional</p>
+                    <a href="ENLACE_DE_INVITACION" class="invite-btn">Invitar al Bot</a>
+                </div>
+                <img src="https://cdn.discordapp.com/attachments/1097219208130969620/1120137543325044806/unknown.png" alt="Bot Preview" class="hero-image" style="max-width: 400px; border-radius: 10px;">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="features">
+            <div class="feature-card">
+                <i class="fas fa-cogs"></i>
+                <h3>Configuración Fácil</h3>
+                <p>Personaliza el bot según las necesidades de tu servidor con comandos sencillos.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-ticket-alt"></i>
+                <h3>Sistema de Tickets</h3>
+                <p>Implementa un sistema de soporte con tickets para una gestión organizada.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Seguridad Garantizada</h3>
+                <p>Protege tu servidor con verificaciones y moderación automática.</p>
+            </div>
+        </section>
+
+        <section class="commands-section">
+            <h2>Comandos Principales</h2>
+            <div class="command">
+                <i class="fas fa-terminal"></i>
+                <div>
+                    <div class="command-code">!setstaff @rol</div>
+                    <p>Configura el rol de staff para permisos especiales</p>
+                </div>
+            </div>
+            <div class="command">
+                <i class="fas fa-folder"></i>
+                <div>
+                    <div class="command-code">!setcategory #categoría</div>
+                    <p>Establece la categoría donde se crearán los tickets</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2024 Discord Bot Manager | <a href="#" style="color: var(--primary);">Política de Privacidad</a></p>
+        </div>
+    </footer>
 </body>
 </html>
