@@ -165,6 +165,12 @@
             border-radius: 10px;
             position: relative;
             z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .command:hover {
+            background: #33373d;
+            transform: translateX(5px);
         }
 
         .command-code {
@@ -173,6 +179,7 @@
             padding: 0.5rem 1rem;
             border-radius: 5px;
             font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
         }
 
         footer {
@@ -189,6 +196,16 @@
 
         footer a:hover {
             color: #4ecdc4;
+        }
+
+        .command-category {
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+            position: relative;
+            z-index: 1;
+            color: var(--accent);
+            font-size: 1.5rem;
         }
 
         @media (max-width: 768px) {
@@ -237,18 +254,82 @@
 
         <section class="commands-section">
             <h2>Comandos Principales</h2>
+            
+            <h3 class="command-category">Configuración</h3>
             <div class="command">
-                <i class="fas fa-terminal"></i>
+                <i class="fas fa-user-shield" style="color: var(--accent);"></i>
                 <div>
                     <div class="command-code">!setstaff @rol</div>
-                    <p>Configura el rol de staff para permisos especiales</p>
+                    <p>Establece rol de staff para permisos especiales</p>
                 </div>
             </div>
             <div class="command">
-                <i class="fas fa-folder"></i>
+                <i class="fas fa-folder" style="color: var(--accent);"></i>
                 <div>
-                    <div class="command-code">!setcategory #categoría</div>
-                    <p>Establece la categoría donde se crearán los tickets</p>
+                    <div class="command-code">!setcategory [ID/Nombre]</div>
+                    <p>Establece categoría para tickets</p>
+                </div>
+            </div>
+            <div class="command">
+                <i class="fas fa-scroll" style="color: var(--accent);"></i>
+                <div>
+                    <div class="command-code">!setlogs #canal</div>
+                    <p>Establece canal de logs para registros del servidor</p>
+                </div>
+            </div>
+            
+            <h3 class="command-category">Tickets</h3>
+            <div class="command">
+                <i class="fas fa-ticket-alt" style="color: var(--accent);"></i>
+                <div>
+                    <div class="command-code">!ticket</div>
+                    <p>Crea un nuevo ticket de soporte</p>
+                </div>
+            </div>
+            <div class="command">
+                <i class="fas fa-times-circle" style="color: var(--accent);"></i>
+                <div>
+                    <div class="command-code">!close</div>
+                    <p>Cierra el ticket actual</p>
+                </div>
+            </div>
+            
+            <h3 class="command-category">Moderación</h3>
+            <div class="command">
+                <i class="fas fa-user-times" style="color: var(--accent);"></i>
+                <div>
+                    <div class="command-code">!kick @usuario [razón]</div>
+                    <p>Expulsa a un usuario del servidor</p>
+                </div>
+            </div>
+            <div class="command">
+                <i class="fas fa-ban" style="color: var(--accent);"></i>
+                <div>
+                    <div class="command-code">!ban @usuario [razón]</div>
+                    <p>Banea a un usuario del servidor</p>
+                </div>
+            </div>
+            <div class="command">
+                <i class="fas fa-exclamation-triangle" style="color: var(--accent);"></i>
+                <div>
+                    <div class="command-code">!warn @usuario [razón]</div>
+                    <p>Advierte a un usuario por comportamiento inapropiado</p>
+                </div>
+            </div>
+            
+            <h3 class="command-category">Utilidad</h3>
+            <div class="command">
+                <i class="fas fa-user-circle" style="color: var(--accent);"></i>
+                <div>
+                    <div class="command-code">!userinfo @usuario</div>
+                    <p>Muestra información detallada de un usuario</p>
+                </div>
+            </div>
+            <div class="command">
+                <i class="fas fa-server" style="color: var(--accent);"></i>
+                <div>
+                    <div class="command-code">!serverinfo</div>
+                    <p>Muestra información detallada del servidor</p>
                 </div>
             </div>
         </section>
@@ -256,7 +337,7 @@
 
     <footer>
         <div class="container">
-            <p>© 2025 Díscord bot anthony| <a href="#">Política de Privacidad</a></p>
+            <p>© 2025 Díscord bot anthony | <a href="#">Política de Privacidad</a></p>
         </div>
     </footer>
 </body>
